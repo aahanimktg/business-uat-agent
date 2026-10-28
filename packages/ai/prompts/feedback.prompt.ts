@@ -1,138 +1,61 @@
-import {
-  Requirement
-} from '../schemas/requirement.schema';
-
-import {
-  TestCase
-} from '../schemas/test-plan.schema';
-
-import {
-  TestExecutionResult
-} from '../schemas/execution-result.schema';
-
 export function buildFeedbackPrompt(
-  requirement: Requirement,
-  testCase: TestCase,
-  execution: TestExecutionResult,
-  feedback: string
-): string {
-
+  currentPlan: any,
+  feedbackHistory: any[]
+) {
   return `
-You are analysing business feedback from
-User Acceptance Testing.
+You are a Senior QA Architect.
 
-Classify the feedback into exactly one:
+IMPORTANT:
 
-TEST_DATA_CHANGE
-AUTOMATION_CHANGE
-REQUIREMENT_CLARIFICATION
-PRODUCT_DEFECT
-NO_CHANGE
-OTHER
+You are NOT generating a new test plan.
 
-Definitions:
+You MUST update the EXISTING test plan.
 
-TEST_DATA_CHANGE:
-The test data should change, while the expected
-business behaviour remains unchanged.
+Preserve all existing fields.
 
-AUTOMATION_CHANGE:
-The automation implementation is likely incorrect
-or outdated.
+Preserve all existing test cases unless feedback explicitly requests modification.
 
-REQUIREMENT_CLARIFICATION:
-The feedback changes or clarifies expected
-business behaviour.
+Resolve clarifications when answers are available.
 
-PRODUCT_DEFECT:
-The business expectation remains valid and the
-application behaviour appears inconsistent with it.
+If clarification is resolved:
+- remove it from clarifications
+- update test cases if needed
 
-NO_CHANGE:
-Feedback does not require modification.
+If feedback requests a new scenario:
+- add a new test case
 
-OTHER:
-Cannot confidently classify.
+If feedback requests modification:
+- update existing test case
 
-RULES:
+Never return sample data.
 
-1. Never change acceptance criteria automatically.
+Never invent placeholder values.
 
-2. Never modify a test merely because it failed.
+Never return empty expectedOutcome.
 
-3. Separate product defects from automation
-   failures.
+Never return empty title.
 
-4. Base the classification only on the provided
-   requirement, execution result and feedback.
+Return ONLY valid JSON matching EXACTLY the same structure as Current Plan.
 
-5. Return only JSON.
+Current Plan:
 
-Required JSON:
+${JSON.stringify(currentPlan, null, 2)}
 
-{
-  "classification":
-    "TEST_DATA_CHANGE |
-     AUTOMATION_CHANGE |
-     REQUIREMENT_CLARIFICATION |
-     PRODUCT_DEFECT |
-     NO_CHANGE |
-     OTHER",
+Feedback History:
 
-  "summary": "string",
+${JSON.stringify(feedbackHistory, null, 2)}
 
-  "affectedTestCaseId":
-    "string or null",
+Rules:
 
-  "affectedStepId":
-    "string or null",
-
-  "acceptanceCriteriaImpacted":
-    true,
-
-  "testUpdateRequired":
-    true,
-
-  "automationUpdateRequired":
-    false,
-
-  "proposedChange":
-    "string or null",
-
-  "reExecutionRecommended":
-    true,
-
-  "reasoning":
-    "string"
-}
-
-REQUIREMENT:
-
-${JSON.stringify(
-  requirement,
-  null,
-  2
-)}
-
-TEST CASE:
-
-${JSON.stringify(
-  testCase,
-  null,
-  2
-)}
-
-EXECUTION:
-
-${JSON.stringify(
-  execution,
-  null,
-  2
-)}
-
-BUSINESS FEEDBACK:
-
-${feedback}
+1. Keep storyId unchanged.
+2. Keep title unchanged.
+3. Increment version by 1.
+4. Keep existing test cases.
+5. Update only affected areas.
+6. Remove resolved clarifications.
+7. If all clarifications resolved return:
+   "clarifications":[]
+8. status should remain "draft".
+9. Return ONLY JSON.
 `;
-
 }

@@ -25,3 +25,15 @@ Thumbs.db
 # Build
 dist/
 coverage/
+
+# Next
+.next/
+out/
+
+# VS Code
+.vscode/settings.json
+
+# Runtime Generated Files
+output/*.json
+output/reviews/*
+output/context/*

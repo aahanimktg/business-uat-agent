@@ -6,9 +6,6 @@ export const AcceptanceCriteriaSchema =
     id: z.string()
       .min(1),
 
-    title: z.string()
-      .min(1),
-
     description: z.string()
       .min(1)
 

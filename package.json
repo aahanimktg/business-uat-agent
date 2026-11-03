@@ -13,6 +13,10 @@
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
@@ -30,6 +34,10 @@
     "typecheck": "tsc --noEmit",
     "ai:connection": "tsx packages/ai/tests/connection.ts",
     "ai:orchestrate": "tsx packages/ai/tests/orchestration.ts",
-    "jira:test": "tsx packages/integrations/jira/test-jira.ts"
+    "jira:test": "tsx packages/integrations/jira/test-jira.ts",
+    "web": "cd apps/web && npm run dev",
+    "api": "npx tsx apps/api/src/server.ts",
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:api": "npx tsx apps/api/src/server.ts"
   }
 }

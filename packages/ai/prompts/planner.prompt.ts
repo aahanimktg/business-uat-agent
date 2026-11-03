@@ -19,8 +19,10 @@ Your responsibilities:
 6. Highlight only business-impacting ambiguities.
 7. Keep scenarios understandable by non-technical business users.
 8. Add clarifications only there is any missing-business-rule | missing-validation | missing-boundary | requirement-ambiguity  in Story/Acceptance criteria.
+9. Do not artificially limit test case count.
+10. Avoid duplicate scenarios
 
-Return ONLY valid JSON (no markdown, no code fences, no commentary):
+Return a complete test plan with maximum business coverage and minimum duplication ONLY valid JSON (no markdown, no code fences, no commentary):
 
 {
   "storyId": "",
@@ -53,7 +55,6 @@ Return ONLY valid JSON (no markdown, no code fences, no commentary):
 }
 
 Requirement:
-
 ${requirement}
 `;
 

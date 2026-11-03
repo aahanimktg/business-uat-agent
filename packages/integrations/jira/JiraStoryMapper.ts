@@ -103,55 +103,81 @@ export class StoryMapper {
     return issues.map(this.map.bind(this));
   }
 
-  static extractAcceptanceCriteria(
-    acceptanceCriteria?: string,
-    description?: string
-  ): AcceptanceCriteria[] {
+  static normalizeText(text: string): string {
 
-    const source =
+  return text
+
+    // remove html tags
+    .replace(/<[^>]*>/g, " ")
+
+    // collapse spaces
+    .replace(/\s+/g, " ")
+
+    .trim();
+
+}
+
+  static extractAcceptanceCriteria(
+  acceptanceCriteria?: string,
+  description?: string
+) {
+
+  const source =
+    this.normalizeText(
+
       acceptanceCriteria?.trim()
         ? acceptanceCriteria
-        : description ?? "";
+        : description ?? ""
 
-    if (!source.trim()) {
-      return [];
-    }
+    );
 
-    const results: AcceptanceCriteria[] = [];
+  const results = [];
 
-    const regex =
-      /(AC\d+)\s*([\s\S]*?)(?=AC\d+|$)/gi;
+  // Format 1:
+  // AC1 ... AC2 ...
 
-    let match;
+  const acMatches = [
+    ...source.matchAll(
+      /(AC\d+)\s*(.*?)(?=AC\d+|$)/gi
+    )
+  ];
 
-    while (
-      (match = regex.exec(source)) !== null
-    ) {
+  if (acMatches.length > 0) {
 
-      const id =
-        match[1].trim();
-
-      const acDescription =
-        match[2]
-          .replace(/\s+/g, " ")
-          .trim();
-
-      if (!acDescription) {
-        continue;
-      }
+    for (const match of acMatches) {
 
       results.push({
 
-        id,
+        id: match[1],
 
         description:
-          acDescription
+          match[2].trim()
 
       });
 
     }
 
     return results;
-
   }
+
+  // Format 2:
+  // HTML bullet based ACs
+
+  const items =
+    source
+      .split(/\d+\.\s+/)
+      .map(x => x.trim())
+      .filter(Boolean);
+
+  return items.map(
+    (item, index) => ({
+
+      id: `AC${index + 1}`,
+
+      description: item
+
+    })
+  );
+
+}
 }

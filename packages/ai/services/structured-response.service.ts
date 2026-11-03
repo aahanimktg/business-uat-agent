@@ -1,84 +1,49 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export class StructuredResponseService {
-
-  parse<T>(
-    rawResponse: string,
-    schema: z.ZodType<T>
-  ): T {
-
-    const cleaned =
-      this.removeMarkdownCodeFence(
-        rawResponse
-      );
+  parse<T>(rawResponse: string, schema: z.ZodType<T>): T {
+    const cleaned = this.removeMarkdownCodeFence(rawResponse);
 
     let parsed: unknown;
 
     try {
-
-      parsed =
-        JSON.parse(cleaned);
-
+      parsed = JSON.parse(cleaned);
     } catch {
-
       throw new Error(
         `AI returned invalid JSON.
 
 Raw response:
-${rawResponse}`
+${rawResponse}`,
       );
-
     }
 
-    const result =
-      schema.safeParse(parsed);
+    const result = schema.safeParse(parsed);
 
     if (!result.success) {
-
       throw new Error(
         `AI response failed schema validation.
 
 Validation:
-${JSON.stringify(
-  result.error.issues,
-  null,
-  2
-)}
+${JSON.stringify(result.error.issues, null, 2)}
 
 Response:
-${cleaned}`
+${cleaned}`,
       );
-
     }
 
     return result.data;
   }
 
-  private removeMarkdownCodeFence(
-    value: string
-  ): string {
+  private removeMarkdownCodeFence(value: string): string {
+    const trimmed = value.trim();
 
-    const trimmed =
-      value.trim();
-
-    if (
-      trimmed.startsWith('```')
-    ) {
-
+    if (trimmed.startsWith("```")) {
       return trimmed
-        .replace(
-          /^```(?:json)?\s*/i,
-          ''
-        )
-        .replace(
-          /\s*```$/,
-          ''
-        )
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/\s*```$/, "")
         .trim();
-
     }
 
     return trimmed;
   }
-
 }

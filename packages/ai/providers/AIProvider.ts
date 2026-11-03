@@ -51,7 +51,7 @@ export class AIProvider {
           messages,
           temperature: 0.2,
           top_p: 0.9,
-          max_tokens: 4000
+          max_tokens: 12000
         })
       }
     );

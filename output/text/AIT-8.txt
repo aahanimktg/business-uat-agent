@@ -1,0 +1,235 @@
+Story: AIT-8 - Passenger Management & Cabin Selection
+Version: 1
+Status: draft
+Generated On: 2026-11-06T10:01:03.972Z
+Jira Updated At: 2026-11-03T13:56:25.738+0530
+
+Coverage Summary:
+Covers default cabin selection, single-cabin enforcement, passenger count increase/decrease with dynamic summary updates, and pre-search validation blocking for adult minimum, infant-to-adult rule, and max 9 occupied seats. Missing UI-specific error copy and whether Infants (no seat) are excluded from the 9-seat cap are unclear.
+
+=== Test Cases ===
+
+[TC-AIT-8-001] Verify Economy is selected by default in Passengers & Cabin (positive, priority: high)
+Acceptance Criteria: AC2
+Objective: Ensure default cabin selection is Economy when opening the passenger & cabin configuration.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Verify selected option: Cabin class equals Economy
+Expected Outcome: Economy cabin is pre-selected by default when the passenger & cabin panel is opened.
+
+[TC-AIT-8-002] Select Business cabin and verify only one cabin is selected (positive, priority: high)
+Acceptance Criteria: AC2
+Objective: Verify user can select Business and it becomes the only selected cabin.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Click: Business cabin option
+  6. Verify selected option: Cabin class equals Business
+  7. Verify selected option: Economy cabin option is not selected
+  8. Verify selected option: First cabin option is not selected
+  9. Click Continue: Passenger & Cabin panel
+Expected Outcome: Business is selected and Economy/First are not selected; selection is exclusive.
+
+[TC-AIT-8-003] Select First cabin and verify only one cabin is selected (positive, priority: medium)
+Acceptance Criteria: AC2
+Objective: Verify user can select First and it becomes the only selected cabin.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Click: First cabin option
+  6. Verify selected option: Cabin class equals First
+  7. Verify selected option: Economy cabin option is not selected
+  8. Verify selected option: Business cabin option is not selected
+  9. Click Continue: Passenger & Cabin panel
+Expected Outcome: First is selected and Economy/Business are not selected; selection is exclusive.
+
+[TC-AIT-8-004] Increase Adult count and verify passenger summary updates dynamically (positive, priority: high)
+Acceptance Criteria: AC1, AC2
+Objective: Ensure increasing adult passenger count updates the summary immediately.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Adults
+  6. Verify value: Adults count equals 2
+  7. Verify value: Passenger summary includes 2 Adults
+  8. Click Continue: Passenger & Cabin panel
+Expected Outcome: Adult count increases to 2 and passenger summary updates dynamically to reflect the new count.
+
+[TC-AIT-8-005] Decrease Adult count but enforce minimum 1 Adult (boundary, priority: high)
+Acceptance Criteria: AC1, AC2
+Objective: Validate the UI prevents reducing Adult count below 1 (minimum adult rule).
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Verify value: Adults count equals 1
+  6. Decrease count: Adults
+  7. Verify value: Adults count equals 1
+  8. Click Continue: Passenger & Cabin panel
+Expected Outcome: Adult count remains at minimum 1; user cannot set Adult count to 0 via the passenger control.
+
+[TC-AIT-8-006] Increase Child count and verify occupied seats contribution and summary update (positive, priority: medium)
+Acceptance Criteria: AC2
+Objective: Ensure Child count can be changed and is reflected in passenger summary (and thus occupied seats).
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Children
+  6. Verify value: Children count equals 1
+  7. Verify value: Passenger summary includes 1 Child
+  8. Click Continue: Passenger & Cabin panel
+Expected Outcome: Child count increases to 1 and passenger summary updates dynamically to include the child passenger.
+
+[TC-AIT-8-007] Increase Infant (no seat) count up to Adult count and verify summary (boundary, priority: high)
+Acceptance Criteria: AC2
+Objective: Validate boundary where Infant (Below 2 Years) equals Adult count (allowed).
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Adults
+  6. Verify value: Adults count equals 2
+  7. Increase count: Infants (Below 2 Years)
+  8. Increase count: Infants (Below 2 Years)
+  9. Verify value: Infants (Below 2 Years) count equals 2
+  10. Verify value: Passenger summary includes 2 Infants
+  11. Click Continue: Passenger & Cabin panel
+Expected Outcome: Infant (no seat) count can be set equal to Adult count and the passenger summary updates accordingly.
+
+[TC-AIT-8-008] Block Search when Infant (no seat) count exceeds Adult count (negative, priority: high)
+Acceptance Criteria: AC2
+Objective: Ensure Search cannot proceed when infant count exceeds adult count.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Verify value: Adults count equals 1
+  6. Increase count: Infants (Below 2 Years)
+  7. Increase count: Infants (Below 2 Years)
+  8. Verify value: Infants (Below 2 Years) count equals 2
+  9. Click Continue: Passenger & Cabin panel
+  10. Click Search: Search Flights button
+  11. Verify message: Infant count must not exceed Adult count is displayed
+  12. Verify page navigation: User remains on Flight search page
+Expected Outcome: Search is blocked, an appropriate validation message is shown, and navigation to results does not occur.
+
+[TC-AIT-8-009] Increase Infant With Seat count and verify it is included in occupied seats summary (positive, priority: medium)
+Acceptance Criteria: AC2
+Objective: Ensure Infant With Seat passenger type can be selected and counted.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Infants With Seat
+  6. Verify value: Infants With Seat count equals 1
+  7. Verify value: Passenger summary includes 1 Infant With Seat
+  8. Click Continue: Passenger & Cabin panel
+Expected Outcome: Infant With Seat count increases to 1 and passenger summary reflects this passenger type.
+
+[TC-AIT-8-010] Allow Search when occupied seats equals 9 (Adult+Child+Infant With Seat) (boundary, priority: high)
+Acceptance Criteria: AC1, AC2
+Objective: Validate the upper boundary where total occupied seats is exactly 9 and Search proceeds.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Adults
+  6. Increase count: Adults
+  7. Increase count: Adults
+  8. Increase count: Adults
+  9. Increase count: Adults
+  10. Increase count: Adults
+  11. Verify value: Adults count equals 7
+  12. Increase count: Children
+  13. Verify value: Children count equals 1
+  14. Increase count: Infants With Seat
+  15. Verify value: Infants With Seat count equals 1
+  16. Click Continue: Passenger & Cabin panel
+  17. Click Search: Search Flights button
+  18. Verify page navigation: Flight results page is displayed
+Expected Outcome: With occupied seats totaling 9, Search proceeds successfully to results.
+
+[TC-AIT-8-011] Block Search when occupied seats exceed 9 (Adult+Child+Infant With Seat) (negative, priority: high)
+Acceptance Criteria: AC1, AC2
+Objective: Ensure Search is blocked when total occupied seats exceeds the maximum of 9.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Adults
+  6. Increase count: Adults
+  7. Increase count: Adults
+  8. Increase count: Adults
+  9. Increase count: Adults
+  10. Increase count: Adults
+  11. Increase count: Adults
+  12. Increase count: Adults
+  13. Verify value: Adults count equals 9
+  14. Increase count: Children
+  15. Verify value: Children count equals 1
+  16. Click Continue: Passenger & Cabin panel
+  17. Click Search: Search Flights button
+  18. Verify message: Maximum 9 occupied seats allowed is displayed
+  19. Verify page navigation: User remains on Flight search page
+Expected Outcome: Search is blocked, validation message indicates seat limit exceeded, and user stays on search page.
+
+[TC-AIT-8-012] Verify passenger summary updates when decreasing a passenger type count (positive, priority: medium)
+Acceptance Criteria: AC2
+Objective: Reduce risk of stale pricing inputs by ensuring summary decreases correctly when counts are reduced.
+Preconditions:
+Steps:
+  1. Open URL: Flight search page
+  2. Wait for page load: Flight search page
+  3. Click: Passengers & Cabin control
+  4. Wait for page load: Passenger & Cabin panel
+  5. Increase count: Children
+  6. Increase count: Children
+  7. Verify value: Children count equals 2
+  8. Verify value: Passenger summary includes 2 Children
+  9. Decrease count: Children
+  10. Verify value: Children count equals 1
+  11. Verify value: Passenger summary includes 1 Child
+  12. Click Continue: Passenger & Cabin panel
+Expected Outcome: Passenger summary updates immediately to reflect decreased counts without stale values.
+
+=== Clarifications ===
+
+[CL-AIT-8-01] What are the exact UI validation message texts (or message keys/test-ids) for: (1) Adult count is zero, (2) Infant count exceeds Adult count, (3) Occupied seats exceed 9?
+Business Impact: Without stable message identifiers, automated checks may be brittle and vary across locales; impacts reliability of negative validation tests.
+Resolved: no
+
+[CL-AIT-8-02] Does 'Infant (Below 2 Years)' (no seat) contribute to the maximum 9-seat limit, or is it excluded as implied by 'Occupied seats include Adults, Children, Infants With Seat'?
+Business Impact: Changes boundary and negative scenarios for seat-cap validation and could lead to incorrect acceptance of bookings with >9 total passengers.
+Resolved: no
+
+[CL-AIT-8-03] When attempting to go below minimum or above maximum passenger limits, does the UI disable increment/decrement controls, or allow the action and then show an error on Search/Continue?
+Business Impact: Affects expected behavior and automation approach (assert disabled state vs assert error message).
+Resolved: no

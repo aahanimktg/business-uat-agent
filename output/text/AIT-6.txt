@@ -1,0 +1,259 @@
+Story: AIT-6 - Flight Search & Journey Planning
+Version: 1
+Status: draft
+Generated On: 2026-11-06T10:01:03.972Z
+Jira Updated At: 2026-11-03T13:56:26.449+0530
+
+Coverage Summary:
+Covers core journey-type support (Round Trip default, One-Way, Multi-City), mandatory airport validations, origin/destination non-equality validation, airport search inputs (code/name/city) with dynamic suggestions, popular destinations display (no input), retention of selected values, and a proxy check for responsive behavior via viewport-based smoke coverage. Includes negative and boundary scenarios for key validation risks. Gaps remain where configuration/CMS-driven behavior and accessibility standards are not objectively verifiable from requirements/UI without additional details.
+
+=== Test Cases ===
+
+[AIT-6-TC-001] Verify Round Trip is selected by default on Flight Search widget (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure the default journey type is Round Trip when the search widget loads.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Verify selected option: Journey type equals Round Trip
+Expected Outcome: Flight Search widget loads and Round Trip is selected by default.
+
+[AIT-6-TC-002] Round Trip search: select Origin/Destination by City Name and verify selections retained (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Validate airport selection by City Name and that selections persist until modified.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Abu Dhabi in Origin field
+  5. Wait for page load
+  6. Select suggestion: Abu Dhabi from airport suggestions
+  7. Verify value: Origin field value equals Abu Dhabi
+  8. Click: Destination field
+  9. Enter text: Mumbai in Destination field
+  10. Wait for page load
+  11. Select suggestion: Mumbai from airport suggestions
+  12. Verify value: Destination field value equals Mumbai
+  13. Click: Passengers & Cabin
+  14. Click Continue
+  15. Verify value: Origin field value equals Abu Dhabi
+  16. Verify value: Destination field value equals Mumbai
+Expected Outcome: Origin and Destination can be selected via City Name and remain populated until the user changes them.
+
+[AIT-6-TC-003] Airport search supports Airport Code input (Origin) with dynamic suggestions (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm airport code entry produces suggestion list and allows selection.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: AUH in Origin field
+  5. Wait for page load
+  6. Select suggestion: AUH from airport suggestions
+  7. Verify value: Origin field value contains AUH
+Expected Outcome: Typing an airport code shows dynamic suggestions and allows selecting the corresponding airport.
+
+[AIT-6-TC-004] Airport search supports Airport Name input (Destination) with dynamic suggestions (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm airport name entry produces suggestions and allows selection.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Destination field
+  4. Enter text: Chhatrapati Shivaji in Destination field
+  5. Wait for page load
+  6. Select suggestion: Chhatrapati Shivaji from airport suggestions
+  7. Verify value: Destination field value contains Chhatrapati Shivaji
+Expected Outcome: Typing an airport name shows dynamic suggestions and allows selecting an airport.
+
+[AIT-6-TC-005] Popular destinations display when no airport criteria is entered (positive, priority: medium)
+Acceptance Criteria: AC1
+Objective: Validate popular destinations appear when opening airport search without typing.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Wait for page load
+  5. Verify message: Popular destinations is displayed
+Expected Outcome: When the airport field is focused with no input, a Popular destinations section is displayed.
+
+[AIT-6-TC-006] Origin is mandatory: attempt search with Destination only (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure the widget blocks search when Origin is missing.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Destination field
+  4. Enter text: Mumbai in Destination field
+  5. Wait for page load
+  6. Select suggestion: Mumbai from airport suggestions
+  7. Click Search
+  8. Verify message: Origin is required is displayed
+Expected Outcome: Search is prevented and an Origin-required validation message is shown.
+
+[AIT-6-TC-007] Destination is mandatory: attempt search with Origin only (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure the widget blocks search when Destination is missing.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Abu Dhabi in Origin field
+  5. Wait for page load
+  6. Select suggestion: Abu Dhabi from airport suggestions
+  7. Click Search
+  8. Verify message: Destination is required is displayed
+Expected Outcome: Search is prevented and a Destination-required validation message is shown.
+
+[AIT-6-TC-008] Origin and Destination must not be identical (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Prevent invalid routing where Origin equals Destination.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Abu Dhabi in Origin field
+  5. Wait for page load
+  6. Select suggestion: Abu Dhabi from airport suggestions
+  7. Click: Destination field
+  8. Enter text: Abu Dhabi in Destination field
+  9. Wait for page load
+  10. Select suggestion: Abu Dhabi from airport suggestions
+  11. Click Search
+  12. Verify message: Origin and Destination must be different is displayed
+Expected Outcome: Search is blocked and a validation message indicates Origin and Destination cannot be the same.
+
+[AIT-6-TC-009] One-Way journey type can be selected and retained (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify One-Way journey type is supported and selection persists.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Journey type One-Way
+  4. Verify selected option: Journey type equals One-Way
+  5. Click: Origin field
+  6. Click: Destination field
+  7. Verify selected option: Journey type equals One-Way
+Expected Outcome: User can select One-Way and the widget remains in One-Way mode until changed.
+
+[AIT-6-TC-010] Multi-City journey type can be selected (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify Multi-City journey type is supported and displays multi-segment controls.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Journey type Multi-City
+  4. Verify selected option: Journey type equals Multi-City
+  5. Verify message: Multi-city segments section is displayed
+Expected Outcome: Multi-City can be selected and the UI displays controls for multiple trip segments.
+
+[AIT-6-TC-011] Only active airports are selectable: inactive airport cannot be selected from suggestions (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure inactive airports are not selectable to prevent booking to closed/disabled stations.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: <inactive-airport-code-or-name> in Origin field
+  5. Wait for page load
+  6. Verify message: No results found is displayed
+Expected Outcome: Inactive airports are not offered as selectable options (e.g., no results or clearly blocked selection).
+
+[AIT-6-TC-012] Nearby airport recommendations appear (country-based configuration) when applicable (positive, priority: medium)
+Acceptance Criteria: AC1
+Objective: Validate that nearby airport recommendations are shown as part of airport search results.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Wait for page load
+  5. Verify message: Nearby airports is displayed
+Expected Outcome: A 'Nearby airports' recommendations section is displayed when the feature is applicable for the user's context/country configuration.
+
+[AIT-6-TC-013] Airport suggestions load dynamically while typing (incremental refinement) (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Confirm suggestions update as the user types more characters (dynamic search behavior).
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Ab in Origin field
+  5. Wait for page load
+  6. Verify message: Airport suggestions is displayed
+  7. Click: Origin field
+  8. Enter text: Abu in Origin field
+  9. Wait for page load
+  10. Verify message: Airport suggestions is displayed
+Expected Outcome: Airport suggestions load dynamically while typing and continue to display as input is refined.
+
+[AIT-6-TC-014] Search widget retains selected airports after switching journey type and back (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure user-entered airports are not unintentionally cleared during journey-type toggling.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Abu Dhabi in Origin field
+  5. Wait for page load
+  6. Select suggestion: Abu Dhabi from airport suggestions
+  7. Click: Destination field
+  8. Enter text: Mumbai in Destination field
+  9. Wait for page load
+  10. Select suggestion: Mumbai from airport suggestions
+  11. Click: Journey type One-Way
+  12. Verify selected option: Journey type equals One-Way
+  13. Click: Journey type Round Trip
+  14. Verify selected option: Journey type equals Round Trip
+  15. Verify value: Origin field value equals Abu Dhabi
+  16. Verify value: Destination field value equals Mumbai
+Expected Outcome: Selected Origin/Destination values remain retained after changing journey type and returning, unless the user explicitly changes them.
+
+[AIT-6-TC-015] Responsive smoke: Flight Search widget renders and is usable on mobile viewport (positive, priority: medium)
+Acceptance Criteria: AC1
+Objective: Provide a minimal automated check that the widget is responsive on mobile sizes.
+Preconditions:
+Steps:
+  1. Open URL: https://<env>/
+  2. Wait for page load
+  3. Click: Origin field
+  4. Enter text: Abu Dhabi in Origin field
+  5. Wait for page load
+  6. Select suggestion: Abu Dhabi from airport suggestions
+  7. Verify value: Origin field value equals Abu Dhabi
+Expected Outcome: On a mobile-sized viewport, the search widget is visible and core input interactions (airport selection) work.
+
+=== Clarifications ===
+
+[CLAR-001] Open-Jaw journey type is mentioned in the description but not in acceptance criteria. Should Open-Jaw be supported in the widget now, and if yes, what is the expected UI and validation behavior?
+Business Impact: Impacts journey-type coverage, routing validation, and booking funnel entry; could materially change test scope and acceptance.
+Resolved: no
+
+[CLAR-002] What is the expected behavior for 'Only active airports shall be available for booking'—should inactive airports be hidden from suggestions, shown disabled, or selectable but blocked with an error? Also, can we get at least one known inactive airport in test data?
+Business Impact: Determines correct negative test design and automation determinism; without known inactive stations, the rule cannot be validated reliably.
+Resolved: no
+
+[CLAR-003] For 'Nearby airport recommendations configurable by country', how is the user's country determined (geo-IP, selected country, site locale), where in the UI are nearby recommendations shown, and what are the expected rules (radius, ordering, max count)?
+Business Impact: Country-based configuration cannot be validated end-to-end without deterministic country context and expected recommendation rules.
+Resolved: no
+
+[CLAR-004] What are the expected validation messages (exact text or identifiers) for mandatory Origin/Destination and Origin=Destination errors?
+Business Impact: Automation stability depends on message selectors/ids. Without standard identifiers, tests may become brittle across copy changes.
+Resolved: no
+
+[CLAR-005] Are there any minimum characters required before airport suggestions appear, and should typing be debounced/throttled with a defined delay?
+Business Impact: Affects dynamic suggestion boundary tests and reduces flakiness by aligning waits/assertions to product behavior.
+Resolved: no

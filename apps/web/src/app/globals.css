@@ -2,7 +2,50 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
+}
+
+/* Mars (f2o-cops-disruption-portal-fe-module) design tokens, remapped onto
+   Tailwind's default palette so existing utility classes pick up the theme. */
+@theme {
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #5fa8d3;
+  --color-blue-500: #0077b6;
+  --color-blue-600: #005f96;
+  --color-blue-700: #004c78;
+  --color-blue-800: #003a5c;
+  --color-blue-900: #022c43;
+
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e5e7eb;
+  --color-slate-300: #d5d8dc;
+  --color-slate-400: #9ca3af;
+  --color-slate-500: #6b7280;
+  --color-slate-600: #4b5563;
+  --color-slate-700: #364153;
+  --color-slate-800: #111827;
+  --color-slate-900: #1b2932;
+
+  --color-green-50: #ecfdf5;
+  --color-green-100: #d1fae5;
+  --color-green-600: #059669;
+  --color-green-700: #047857;
+
+  --color-yellow-50: #fff7ed;
+  --color-yellow-100: #ffedd5;
+  --color-yellow-700: #ea580c;
+  --color-yellow-800: #9a3412;
+
+  --color-red-50: #fef2f2;
+  --color-red-200: #fecaca;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+
+  --color-gold: #b08747;
 }
 
 @theme inline {
@@ -12,15 +55,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

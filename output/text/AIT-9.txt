@@ -1,0 +1,190 @@
+Story: AIT-9 - Promo Code, Loyalty Booking & Fare Configuration
+Version: 1
+Status: draft
+Generated On: 2026-11-03T20:09:49.004Z
+Jira Updated At: 2026-11-03T13:56:26.264+0530
+
+Coverage Summary:
+Covers presence of promo code field, validation during search for valid/invalid codes, pricing impact for valid promo codes, and key loyalty mode behaviors including enabling loyalty search, hiding revenue fare amounts in loyalty calendar, and keeping loyalty availability visible. Includes combined-mode check to ensure loyalty calendar does not leak revenue fares when promo code is entered. Key open points are business rules for invalid-code flow, promo/loyalty interaction, exact visibility rules for fares in loyalty experience, and input constraints.
+
+=== Test Cases ===
+
+[AIT-9-TC01] Promo code field is available on flight search (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure customers can enter a promo code as part of the flight search workflow.
+Preconditions:
+  - User is on the flight search page/form.
+Steps:
+  1. Observe the flight search form fields.
+  2. Locate the promo code input field.
+  3. Attempt to place focus in the field and type a value.
+Expected Outcome: A promo code field is present, accessible, and allows entry of a promo code value.
+
+[AIT-9-TC02] Promo code is validated during search execution (invalid code shows validation message) (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify invalid promo codes are validated at search time and produce an appropriate error message.
+Preconditions:
+  - User is on the flight search page/form.
+  - An invalid promo code value is available for testing.
+Steps:
+  1. Enter valid trip details (e.g., origin, destination, dates, passengers).
+  2. Enter an invalid promo code in the promo code field.
+  3. Execute the search.
+Expected Outcome: Search execution triggers promo code validation and an appropriate validation message is displayed indicating the promo code is invalid.
+
+[AIT-9-TC03] Promo code is validated during search execution (valid code applies and changes pricing) (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify valid promo codes affect search pricing outcomes.
+Preconditions:
+  - User is on the flight search page/form.
+  - A valid promo code is available for testing.
+  - A baseline search (same itinerary, no promo code) can be run for comparison.
+Steps:
+  1. Enter valid trip details (e.g., origin, destination, dates, passengers).
+  2. Execute the search without a promo code and note the displayed price for a comparable itinerary/fare.
+  3. Return to search and enter the same trip details.
+  4. Enter a valid promo code.
+  5. Execute the search.
+  6. Compare the displayed price for the same comparable itinerary/fare.
+Expected Outcome: Promo code validation occurs during search and the valid promo code impacts pricing (e.g., discounted price is displayed compared to the no-promo baseline for eligible results).
+
+[AIT-9-TC04] Promo code does not prevent search execution when invalid (message shown and customer can proceed) (negative, priority: medium)
+Acceptance Criteria: AC1
+Objective: Confirm user experience when promo code is invalid: message is shown and behavior is clear (search results availability/pricing are not discounted).
+Preconditions:
+  - User is on the flight search page/form.
+  - An invalid promo code value is available for testing.
+Steps:
+  1. Enter valid trip details.
+  2. Enter an invalid promo code.
+  3. Execute the search.
+  4. Observe whether results are displayed and whether pricing reflects any promo discount.
+Expected Outcome: An invalid promo code validation message is displayed during search execution; results (if shown) are not discounted due to the invalid code.
+
+[AIT-9-TC05] Boundary: Promo code field accepts maximum supported length and still validates on search (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure the promo code field supports boundary-length entry without breaking validation at search time.
+Preconditions:
+  - User is on the flight search page/form.
+  - The maximum supported promo code length is known or discoverable from UI constraints.
+Steps:
+  1. Enter valid trip details.
+  2. Enter a promo code at the maximum allowed length (as enforced by the UI).
+  3. Execute the search.
+  4. Observe validation behavior and any messages.
+Expected Outcome: Promo code input at the maximum allowed length is accepted by the field and is validated during search execution (either accepted as valid or rejected with a clear invalid message).
+
+[AIT-9-TC06] Boundary: Promo code field handles empty value (no promo) without validation error (boundary, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm that leaving the promo code field empty does not create an invalid promo message and search behaves normally.
+Preconditions:
+  - User is on the flight search page/form.
+Steps:
+  1. Enter valid trip details.
+  2. Leave the promo code field empty.
+  3. Execute the search.
+Expected Outcome: Search executes without promo code validation errors and pricing reflects standard (non-promo) pricing.
+
+[AIT-9-TC07] Loyalty search mode can be enabled from flight search (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify customers can select loyalty redemption search mode.
+Preconditions:
+  - User is on the flight search page/form.
+Steps:
+  1. Locate the control for enabling loyalty redemption search (e.g., toggle, checkbox, tab).
+  2. Enable loyalty search mode.
+Expected Outcome: Loyalty search mode is available and can be enabled by the user.
+
+[AIT-9-TC08] Loyalty search mode: Calendar does not display revenue fare amounts (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure the loyalty calendar experience does not expose cash (revenue) fare amounts when loyalty search is enabled.
+Preconditions:
+  - User is on the flight search page/form.
+  - Calendar-based fare/availability view is available in the product.
+Steps:
+  1. Enable loyalty search mode.
+  2. Open the calendar view (if not already displayed) and browse multiple dates.
+  3. Observe the information shown per date (prices/points/availability).
+Expected Outcome: No revenue/cash fare amounts are displayed anywhere in the calendar when loyalty search is enabled.
+
+[AIT-9-TC09] Loyalty search mode: Loyalty availability remains visible in calendar (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm that while revenue fares are hidden, reward availability is still presented to support decision-making.
+Preconditions:
+  - User is on the flight search page/form.
+  - Calendar-based fare/availability view is available in the product.
+Steps:
+  1. Enable loyalty search mode.
+  2. Open the calendar view and browse dates that include both available and unavailable reward options (if possible).
+  3. Observe how availability is presented (e.g., available/unavailable indicators).
+Expected Outcome: Loyalty availability remains visible in the calendar (e.g., clear indicators of availability), even though revenue fare amounts are not shown.
+
+[AIT-9-TC10] Loyalty search mode: Search results are presented using loyalty redemption model (not cash pricing) (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Validate that loyalty redemption search returns reward-flight results appropriate for points redemption rather than cash fare presentation.
+Preconditions:
+  - User is on the flight search page/form.
+Steps:
+  1. Enable loyalty search mode.
+  2. Enter valid trip details.
+  3. Execute the search.
+  4. Review the results presentation for redemption information.
+Expected Outcome: Results are shown for loyalty redemption search; the presentation aligns to loyalty redemption (e.g., points/redemption context), not standard revenue fare pricing.
+
+[AIT-9-TC11] Switching between loyalty mode and standard cash mode changes what is displayed (revenue fares hidden only in loyalty mode) (positive, priority: medium)
+Acceptance Criteria: AC1
+Objective: Confirm users can switch modes and the UI responds accordingly (revenue fare info hidden in loyalty mode).
+Preconditions:
+  - User is on the flight search page/form.
+  - Calendar-based fare/availability view is available.
+Steps:
+  1. Enable loyalty search mode.
+  2. Open the calendar view and confirm revenue fare amounts are not displayed.
+  3. Disable loyalty search mode (return to standard/cash booking mode).
+  4. Open or refresh the calendar view for the same route/dates.
+Expected Outcome: Revenue fare amounts are not displayed in loyalty mode, and returning to standard mode allows standard fare information to be displayed again (as applicable).
+
+[AIT-9-TC12] Promo code and loyalty search mode used together: promo code behavior is clear and does not expose revenue fares in loyalty calendar (negative, priority: medium)
+Acceptance Criteria: AC1
+Objective: Validate combined usage does not lead to business-rule leakage (e.g., cash fares shown in loyalty calendar) and that promo code handling is clear in loyalty context.
+Preconditions:
+  - User is on the flight search page/form.
+  - A valid promo code is available for testing.
+  - Calendar-based fare/availability view is available.
+Steps:
+  1. Enable loyalty search mode.
+  2. Enter valid trip details.
+  3. Enter a valid promo code.
+  4. Execute the search.
+  5. Open the calendar view and observe whether revenue fare amounts appear.
+Expected Outcome: Loyalty mode continues to hide revenue fare amounts in the calendar. Promo code handling in loyalty mode does not result in revenue fare exposure.
+
+=== Clarifications ===
+
+[AIT-9-CL01] When a promo code is invalid, should search results still be returned at standard pricing (with a message), or should search be blocked until the code is removed/corrected?
+Business Impact: Changes the customer journey significantly and affects conversion; QA needs to assert correct behavior for invalid codes.
+Resolved: no
+
+[AIT-9-CL02] What qualifies as an 'appropriate error message' for invalid promo codes (exact text not needed, but should it be inline, banner, blocking, and should it specify the reason such as expired/unknown/not applicable)?
+Business Impact: Impacts customer understanding and support burden; different message behaviors affect usability and acceptance.
+Resolved: no
+
+[AIT-9-CL03] How should valid promo code impact be demonstrated in results—must every eligible itinerary be discounted, and should there be an explicit indicator that a promo was applied?
+Business Impact: Without clear rules/indicators, customers may not trust pricing and QA cannot reliably validate correct discount application.
+Resolved: no
+
+[AIT-9-CL04] What are the promo code input constraints (max length, allowed characters, case sensitivity, trimming of leading/trailing spaces)?
+Business Impact: Affects successful redemption and prevents false invalidation due to formatting; drives boundary and negative testing.
+Resolved: no
+
+[AIT-9-CL05] In loyalty search mode, what exactly must be hidden: only cash amounts in the calendar, or also cash amounts in the result list/details? Are taxes/fees in money allowed to be shown alongside points?
+Business Impact: Risk of exposing revenue fare information contrary to requirement; also impacts what information customers see to complete redemption.
+Resolved: no
+
+[AIT-9-CL06] What is the definition of 'Loyalty availability must remain visible' (e.g., a simple available/unavailable indicator, number of seats, redemption tiers)?
+Business Impact: Determines whether the loyalty calendar provides enough information to choose dates; impacts user decision-making and feature value.
+Resolved: no
+
+[AIT-9-CL07] How should promo codes interact with loyalty redemption searches—are promo codes ignored/blocked in loyalty mode, or can they affect loyalty pricing/redemption rules?
+Business Impact: Prevents inconsistent pricing/eligibility outcomes and avoids customer confusion when combining benefits.
+Resolved: no

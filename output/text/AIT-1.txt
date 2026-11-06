@@ -1,0 +1,158 @@
+Story: AIT-1 - Display Transaction Currency Alongside Default Wallet Currency
+Version: 1
+Status: draft
+Generated On: 2026-11-03T20:03:55.987Z
+Jira Updated At: 2026-11-03T13:57:16.464+0530
+
+Coverage Summary:
+Covers the core display rule across transaction list (L1) and transaction details views (L2/L3): show both default and transacting currency when different, and only default currency when same. Includes mixed-list correctness to avoid incorrect currency pairing and boundary/negative data-quality scenarios to prevent misleading bracketed displays. Clarifications capture key ambiguities about page scope, formatting/precision, conversion definition, and special transaction types.
+
+=== Test Cases ===
+
+[AIT-1-TC01] L1 Transaction List: Show default currency and transacting currency when different (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure users can see both the default wallet currency amount and the original transacting currency amount for a transaction executed in a different currency.
+Preconditions:
+  - User has a default wallet currency set (e.g., AED).
+  - At least one transaction exists where the transaction currency differs from the default wallet currency (e.g., INR).
+  - User can access the L1 transaction list page.
+Steps:
+  1. Open the L1 transaction list page.
+  2. Locate the transaction where transaction currency differs from default wallet currency.
+Expected Outcome: The transaction amount is displayed in default wallet currency and additionally shows the transacting currency amount in brackets below/alongside as specified (e.g., AED 120.00 (INR 2,700.00)).
+
+[AIT-1-TC02] L1 Transaction List: Show only default currency when transaction currency is same as default (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Prevent confusion by avoiding duplicate currency display when no FX occurred.
+Preconditions:
+  - User has a default wallet currency set (e.g., AED).
+  - At least one transaction exists where the transaction currency equals the default wallet currency (e.g., AED).
+  - User can access the L1 transaction list page.
+Steps:
+  1. Open the L1 transaction list page.
+  2. Locate a transaction where transaction currency equals the default wallet currency.
+Expected Outcome: Only the default currency amount is displayed; no bracketed transacting currency amount is shown.
+
+[AIT-1-TC03] L2 Transaction Details: Show default currency and transacting currency when different (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure transaction details page clearly shows both currencies for cross-currency transactions.
+Preconditions:
+  - User has a default wallet currency set.
+  - At least one cross-currency transaction exists (transaction currency differs from default).
+  - User can navigate from the list to the L2 transaction details page for that transaction.
+Steps:
+  1. Open the L1 transaction list.
+  2. Select a transaction where the transaction currency differs from the default currency to open its L2 details page.
+Expected Outcome: On L2 transaction details, the amount is displayed in default currency and additionally shows the transacting currency amount in brackets as specified.
+
+[AIT-1-TC04] L2 Transaction Details: Show only default currency when transaction currency is same as default (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure transaction details page does not show redundant bracketed currency when transaction currency matches default.
+Preconditions:
+  - User has a default wallet currency set.
+  - At least one same-currency transaction exists (transaction currency equals default).
+  - User can navigate to the L2 details page for that transaction.
+Steps:
+  1. Open the L1 transaction list.
+  2. Select a transaction where the transaction currency equals the default currency to open its L2 details page.
+Expected Outcome: On L2 transaction details, only the default currency amount is displayed; no bracketed transacting currency amount is shown.
+
+[AIT-1-TC05] L3 Page (as applicable): Show default currency and transacting currency when different (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Validate that any deeper transaction view (L3) also displays both currencies for cross-currency transactions.
+Preconditions:
+  - User has a default wallet currency set.
+  - At least one cross-currency transaction exists.
+  - There is an L3 page accessible for the selected transaction (e.g., expanded details/receipt view).
+Steps:
+  1. Navigate to a cross-currency transaction.
+  2. Open the L3 page/view for the transaction.
+Expected Outcome: On L3, the amount is displayed in default currency and additionally shows the transacting currency amount in brackets as specified.
+
+[AIT-1-TC06] L3 Page (as applicable): Show only default currency when transaction currency is same as default (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Validate L3 does not show redundant bracketed currency when no currency difference exists.
+Preconditions:
+  - User has a default wallet currency set.
+  - At least one same-currency transaction exists.
+  - There is an L3 page accessible for the selected transaction.
+Steps:
+  1. Navigate to a same-currency transaction.
+  2. Open the L3 page/view for the transaction.
+Expected Outcome: On L3, only the default currency amount is displayed; no bracketed transacting currency amount is shown.
+
+[AIT-1-TC07] Mixed list validation: Transaction list shows correct currency pairing per row (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure users viewing multiple transactions see correct currency display on each transaction without bleed-over or incorrect pairing.
+Preconditions:
+  - User has a default wallet currency set (e.g., AED).
+  - Transaction list includes multiple transactions including: at least one same-currency transaction (AED) and at least one cross-currency transaction (e.g., INR).
+Steps:
+  1. Open the L1 transaction list page.
+  2. Review multiple transactions across the list including same-currency and cross-currency entries.
+Expected Outcome: Each same-currency entry shows only default currency; each cross-currency entry shows default currency plus the correct bracketed original transacting currency amount for that specific transaction.
+
+[AIT-1-TC08] Boundary: Cross-currency transaction with zero amount displays both currencies appropriately (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure display rules apply even when amount is 0.00, avoiding misinterpretation for zero-value transactions (e.g., fee reversals).
+Preconditions:
+  - User has a default wallet currency set.
+  - A cross-currency transaction exists where the displayed amount is 0.00 in default currency and has an original transaction currency amount (which may also be 0.00).
+Steps:
+  1. Open the transaction in L1 and then open its details (L2 and/or L3).
+Expected Outcome: Where the transaction currency differs from default, both currencies are displayed even for zero amounts; if currencies are the same, only default currency is displayed.
+
+[AIT-1-TC09] Boundary: Very large cross-currency amounts still show both currencies (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure the UI can display large monetary values without dropping either currency display.
+Preconditions:
+  - User has a default wallet currency set.
+  - A cross-currency transaction exists with very large amount values in default and transaction currencies.
+Steps:
+  1. Open the transaction list (L1) and locate the large-value cross-currency transaction.
+  2. Open transaction details (L2 and/or L3).
+Expected Outcome: Both default and transacting currency amounts are displayed for the transaction and remain readable and correctly associated to the transaction.
+
+[AIT-1-TC10] Negative: Transaction record missing transaction currency should not mislead users (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Avoid showing incorrect or misleading bracketed currency when transaction currency is unavailable.
+Preconditions:
+  - User has a default wallet currency set.
+  - A transaction exists where the transaction currency field is missing/blank due to data issue (test environment or mocked response).
+Steps:
+  1. Open the transaction list (L1) and view the affected transaction.
+  2. Open transaction details (L2 and/or L3) for the affected transaction.
+Expected Outcome: The UI does not display an incorrect bracketed currency/amount. Only the default currency is shown or the UI clearly omits the bracketed portion without implying a wrong transaction currency.
+
+[AIT-1-TC11] Negative: Transaction record missing transaction amount should not show incomplete bracketed display (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Prevent partial bracket display that could confuse users (e.g., showing only currency code with no amount).
+Preconditions:
+  - User has a default wallet currency set.
+  - A cross-currency transaction exists where the transaction amount in the original currency is missing/blank due to data issue (test environment or mocked response).
+Steps:
+  1. Open the transaction list (L1) and view the affected transaction.
+  2. Open transaction details (L2 and/or L3) for the affected transaction.
+Expected Outcome: The UI does not show an incomplete bracketed value (e.g., '(INR )'). The bracketed portion is omitted or handled in a non-misleading way.
+
+=== Clarifications ===
+
+[AIT-1-CL01] What exactly are the L1, L2, and L3 pages in this product (names/locations), and are there any additional transaction surfaces (e.g., search results, filtered views, statement/export previews) that must also display both currencies?
+Business Impact: If some transaction views are missed, users will still be confused in those areas and support complaints will persist despite partial delivery.
+Resolved: no
+
+[AIT-1-CL02] Should the bracketed transacting currency amount be displayed on the same line or on a new line below the default currency in all views (list and details), and must the format be consistent across all pages?
+Business Impact: Inconsistent placement may reduce readability, increase perceived errors, and cause users to misinterpret which amount is which.
+Resolved: no
+
+[AIT-1-CL03] What is the required rounding/decimal precision and formatting rules for each currency (e.g., 2 decimals vs 0/3), and should both amounts follow currency-specific formatting rules?
+Business Impact: Incorrect rounding/formatting can lead to financial misunderstanding and loss of trust, even if the correct currency codes are shown.
+Resolved: no
+
+[AIT-1-CL04] Should the displayed default currency amount represent the converted amount at the applied FX rate at time of transaction, and is it guaranteed to be stored per transaction (vs computed dynamically)?
+Business Impact: If conversion display differs from what users were charged, users may dispute transactions and report incorrect balances.
+Resolved: no
+
+[AIT-1-CL05] How should refunds/reversals/chargebacks be displayed when the original transaction currency differs from the default currency—should both currencies still display and do signs (positive/negative) apply to both amounts identically?
+Business Impact: Incorrect sign/currency presentation can cause users to believe money was refunded/charged in the wrong currency.
+Resolved: no

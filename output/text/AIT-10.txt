@@ -1,0 +1,308 @@
+Story: AIT-10 - Guided Search Validation & Flight Availability Search
+Version: 1
+Status: draft
+Generated On: 2026-11-03T20:09:49.004Z
+Jira Updated At: 2026-11-03T13:56:26.004+0530
+
+Coverage Summary:
+Covers guided validation (open first missing field, sequential guidance, automatic execution after pass), prevention of availability search until validations succeed, validation categories (airports, dates, passenger rules, promo codes, journey type rules), visibility of Search button, loading indicator behavior, result content requirements, and end states for no availability and service failure. Includes positive, negative, and boundary scenarios while flagging key missing business rules needed for complete validation coverage.
+
+=== Test Cases ===
+
+[AIT-10-TC-001] Search button remains visible throughout the search journey (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure customers can always access Search and are not blocked by scrolling or guided validation interactions.
+Preconditions:
+  - Customer is on flight search page with search form and Search button present
+Steps:
+  1. Scroll the page to different sections (top, middle, bottom) if the page is scrollable.
+  2. Expand/open any collapsible search inputs (e.g., airports/date picker/passenger selector/promo code).
+  3. Trigger guided validation by clicking Search with missing data.
+  4. Observe whether Search remains visible and accessible during these interactions.
+Expected Outcome: Search button remains visible and accessible at all times, including during scrolling and while guided validation opens missing fields.
+
+[AIT-10-TC-002] Guided validation opens the first missing mandatory field when Search is clicked (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Verify the system guides the customer to the first missing required input upon Search.
+Preconditions:
+  - Customer is on flight search page
+  - At least two mandatory fields are missing
+Steps:
+  1. Leave multiple mandatory fields empty (e.g., origin and dates).
+  2. Click Search.
+  3. Observe which input is opened/focused first.
+Expected Outcome: The first missing mandatory field (based on the product’s defined order) opens automatically when Search is clicked.
+
+[AIT-10-TC-003] Guided validation continues sequentially until all mandatory fields are completed (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure the customer is guided step-by-step through all missing required fields.
+Preconditions:
+  - Customer is on flight search page
+  - Multiple mandatory fields are missing
+Steps:
+  1. Click Search with required fields missing.
+  2. Complete the field that the system opens.
+  3. Attempt to proceed (e.g., click Search again, or close the field if applicable).
+  4. Repeat until all required fields are filled.
+Expected Outcome: After each completion, the system guides the customer to the next missing mandatory field until all required information is provided.
+
+[AIT-10-TC-004] Search executes automatically after all validations pass (no extra customer action required) (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm that once all required information is completed and valid, the system automatically runs availability search.
+Preconditions:
+  - Customer is on flight search page
+  - At least one required field is missing initially
+Steps:
+  1. Click Search.
+  2. Follow the guided prompts to fill in all missing mandatory fields with valid values.
+  3. Do not click Search again after the last missing field is completed (if the UI permits).
+  4. Observe whether the availability search starts.
+Expected Outcome: Once all validations pass, the system automatically starts the flight availability search.
+
+[AIT-10-TC-005] Availability search is not executed if mandatory field(s) remain missing (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure no availability call is made until required information is present.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Ensure at least one mandatory field is missing.
+  2. Click Search.
+  3. Do not complete the opened missing field.
+  4. Observe whether results load or a loading state starts.
+Expected Outcome: No availability search is executed; instead, the system keeps the customer in guided completion of missing required fields.
+
+[AIT-10-TC-006] Validation: Airports - missing origin triggers guidance to origin field (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm origin airport is treated as mandatory and triggers guided validation when missing.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Leave origin airport empty.
+  2. Fill other required fields with valid values (destination, dates, passengers, journey type as applicable).
+  3. Click Search.
+Expected Outcome: System opens/focuses the origin airport field as the missing mandatory field and does not execute the search.
+
+[AIT-10-TC-007] Validation: Airports - missing destination triggers guidance to destination field (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm destination airport is treated as mandatory and triggers guided validation when missing.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Fill origin airport with a valid value.
+  2. Leave destination airport empty.
+  3. Fill other required fields with valid values (dates, passengers, journey type as applicable).
+  4. Click Search.
+Expected Outcome: System opens/focuses the destination airport field as the missing mandatory field and does not execute the search.
+
+[AIT-10-TC-008] Validation: Dates - missing date(s) triggers guidance to date picker (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm date selection is mandatory and the system guides to missing dates.
+Preconditions:
+  - Customer is on flight search page
+  - Valid origin and destination are provided
+Steps:
+  1. Leave travel date(s) empty (e.g., no departure date selected).
+  2. Set other required fields to valid values.
+  3. Click Search.
+Expected Outcome: System opens/focuses the date selection control as the missing mandatory field and does not execute the search.
+
+[AIT-10-TC-009] Validation: Passenger rules - missing/invalid passenger selection triggers guidance to passengers control (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm passenger rules are validated before search and customers are guided when not satisfied.
+Preconditions:
+  - Customer is on flight search page
+  - Valid origin, destination, and dates are provided
+Steps:
+  1. Set passengers to an invalid state per UI capability (e.g., clear passenger selection if possible or set to zero if permitted).
+  2. Click Search.
+Expected Outcome: System guides the customer to the passenger selector and prevents availability search from executing until passenger rules are satisfied.
+
+[AIT-10-TC-010] Validation: Promo code - invalid promo code prevents search and guides customer to promo code input (negative, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure promo code business rules are validated and block search when invalid.
+Preconditions:
+  - Customer is on flight search page
+  - Promo code field is available
+  - Valid origin, destination, dates, passengers, and journey type are provided
+Steps:
+  1. Enter a promo code value that is considered invalid by the business rules.
+  2. Click Search.
+Expected Outcome: System prevents the availability search from executing and guides the customer to address the promo code issue (e.g., focuses/opens promo input).
+
+[AIT-10-TC-011] Validation: Promo code - empty promo code does not block search (if promo code is optional) (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Validate behavior when promo code is not provided, ensuring no unintended blocking.
+Preconditions:
+  - Customer is on flight search page
+  - Promo code field is available
+  - All other required fields are valid
+Steps:
+  1. Ensure promo code field is left blank.
+  2. Click Search.
+Expected Outcome: Search proceeds normally (validations pass) and availability search executes.
+
+[AIT-10-TC-012] Validation: Journey type rules - invalid journey configuration prevents search and guides customer (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure journey type specific rules are validated (e.g., one-way vs round-trip required fields).
+Preconditions:
+  - Customer is on flight search page
+  - Journey type selection is available
+Steps:
+  1. Select a journey type that requires additional information (e.g., Round-trip).
+  2. Leave the journey-type-dependent requirement missing (e.g., return date not selected).
+  3. Fill other required fields with valid values.
+  4. Click Search.
+Expected Outcome: System guides the customer to the missing journey-type-related field(s) and does not execute availability search until valid.
+
+[AIT-10-TC-013] Loading indicator is displayed while availability search is processing (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure customers see a loading state after validations pass and search begins.
+Preconditions:
+  - Customer is on flight search page
+  - All required inputs are valid
+Steps:
+  1. Click Search (or trigger automatic search after guided completion).
+  2. Observe the UI while the system processes the request.
+Expected Outcome: A loading indicator is displayed while the availability search is processing and disappears when results (or an end state) are shown.
+
+[AIT-10-TC-014] Search results display all required flight option attributes (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Validate the business-critical content of search results for customers to choose an itinerary.
+Preconditions:
+  - Customer is on flight search page
+  - All required inputs are valid
+  - Availability service returns one or more results
+Steps:
+  1. Execute search.
+  2. Open/view at least one returned flight option.
+  3. Verify presence of required fields on each displayed option.
+Expected Outcome: Each displayed flight option includes: Flight Number, Origin, Destination, Departure Time, Arrival Time, Duration, Stops, Cabin Class, Fare Family, Price, and Loyalty Eligibility.
+
+[AIT-10-TC-015] "No Flights Available" is shown when no results are returned (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure customers receive a clear message when there are no available itineraries.
+Preconditions:
+  - Customer is on flight search page
+  - All required inputs are valid
+  - Availability service returns zero results
+Steps:
+  1. Execute search with criteria known to yield no results (or simulate no results).
+  2. Observe the results area.
+Expected Outcome: "No Flights Available" message is displayed.
+
+[AIT-10-TC-016] Service unavailable message is shown when search service fails (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure technical failures in availability service are handled with an appropriate message.
+Preconditions:
+  - Customer is on flight search page
+  - All required inputs are valid
+  - Availability service is unavailable/fails (e.g., error/timeout)
+Steps:
+  1. Execute search.
+  2. Simulate/trigger search service failure.
+  3. Observe the message presented to the customer.
+Expected Outcome: A service unavailable message is displayed.
+
+[AIT-10-TC-017] Multiple missing fields: system opens required fields automatically upon Search click (without manual expanding) (positive, priority: high)
+Acceptance Criteria: AC1
+Objective: Confirm missing required fields open automatically when Search is clicked.
+Preconditions:
+  - Customer is on flight search page
+  - Some required fields are in collapsed/closed controls (e.g., date picker, passenger dropdown)
+Steps:
+  1. Leave a required field inside a collapsible control unfilled (e.g., dates).
+  2. Click Search without manually opening the control.
+  3. Observe whether the relevant control opens automatically.
+Expected Outcome: The missing required field’s control opens automatically upon Search click, enabling the customer to complete it.
+
+[AIT-10-TC-018] Sequential guidance honors previously completed fields and does not reset customer inputs (positive, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure guided validation does not cause loss of entered information while completing remaining required fields.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Enter valid origin and destination.
+  2. Click Search with dates missing to trigger guidance.
+  3. Complete dates.
+  4. Verify origin and destination remain as entered.
+  5. Continue completing remaining prompted fields if any.
+Expected Outcome: Previously completed valid fields remain populated and unchanged while the system guides through remaining requirements.
+
+[AIT-10-TC-019] Boundary: Validations pass when all mandatory fields are completed with minimal acceptable inputs (where applicable) (boundary, priority: medium)
+Acceptance Criteria: AC1
+Objective: Confirm the system accepts minimal valid configurations and proceeds to availability search.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Enter the simplest valid trip configuration (e.g., one-way with required origin, destination, one date, and default passenger selection).
+  2. Leave optional inputs (like promo code) blank.
+  3. Click Search.
+Expected Outcome: All validations pass and the availability search executes, showing loading then results/no-results as appropriate.
+
+[AIT-10-TC-020] Negative: Invalid airport selection/value prevents search and guides customer to airports control (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure airport rules are validated and invalid airports do not proceed to availability search.
+Preconditions:
+  - Customer is on flight search page
+Steps:
+  1. Enter/select an airport value in a way the UI can represent as invalid (e.g., free-typed invalid code if supported or a known invalid selection).
+  2. Complete all other required fields with valid values.
+  3. Click Search.
+Expected Outcome: System prevents availability search and guides customer to correct the airport input.
+
+[AIT-10-TC-021] Negative: Invalid date input prevents search and guides customer to dates control (negative, priority: high)
+Acceptance Criteria: AC1
+Objective: Ensure date rules are validated and invalid date selection blocks availability search.
+Preconditions:
+  - Customer is on flight search page
+  - Valid origin and destination are provided
+Steps:
+  1. Select dates that violate date rules as defined by the product (e.g., an invalid range if the UI allows).
+  2. Click Search.
+Expected Outcome: System prevents availability search and guides the customer to fix the date input.
+
+[AIT-10-TC-022] Negative: Passenger rules violation prevents search and guides customer (example: invalid passenger composition if supported) (negative, priority: medium)
+Acceptance Criteria: AC1
+Objective: Ensure passenger business rules are enforced prior to calling availability service.
+Preconditions:
+  - Customer is on flight search page
+  - UI supports selecting different passenger types (e.g., adult/child/infant)
+Steps:
+  1. Create a passenger selection that violates passenger rules (as defined by the product).
+  2. Complete other required fields with valid values.
+  3. Click Search.
+Expected Outcome: System prevents availability search and guides the customer to correct passenger selection.
+
+=== Clarifications ===
+
+[CLAR-001] What are the mandatory fields for each journey type (One-way, Round-trip, Multi-city if applicable) and in what exact order should the system guide the user to missing fields?
+Business Impact: Without the defined mandatory set and guidance order, the guided validation experience may be inconsistent, causing customers to miss required information or receive confusing prompts.
+Resolved: no
+
+[CLAR-002] What specific airport validation rules must be enforced before calling availability (e.g., origin ≠ destination, supported airports only, city vs airport code handling)?
+Business Impact: If airport rules are unclear, the system may allow invalid searches that fail later or block valid customer searches, impacting conversion.
+Resolved: no
+
+[CLAR-003] What specific date rules must be validated (e.g., departure date cannot be in the past, return date must be after departure, max trip length, max booking horizon)?
+Business Impact: Unclear date rules can lead to availability requests that should be blocked, causing errors, customer frustration, and increased service load.
+Resolved: no
+
+[CLAR-004] What are the passenger rules to validate (e.g., minimum/maximum total passengers, infant-to-adult ratio, age-based constraints, max per booking)?
+Business Impact: Passenger rules directly affect legal/business compliance and fare eligibility; missing definitions can cause invalid bookings or unnecessary search failures.
+Resolved: no
+
+[CLAR-005] What are the promo code rules and expected customer-facing behavior when a promo code is invalid/expired/not applicable (block search vs allow search without applying promo; exact message)?
+Business Impact: Promo code handling impacts pricing trust and conversion; unclear behavior can result in incorrect discounts or prevent legitimate searches.
+Resolved: no
+
+[CLAR-006] Does the system automatically execute search immediately after the last missing field is completed, or only after the customer clicks Search again once all fields are complete?
+Business Impact: This affects user expectations and potential double-submissions; incorrect behavior can cause confusion or duplicate service calls.
+Resolved: no
+
+[CLAR-007] How should business rule failures be presented (inline field error, banner, modal) and should they also trigger the same guided 'open the field' behavior as missing fields?
+Business Impact: Inconsistent handling of business failures can prevent customers from understanding how to fix issues, increasing abandonment.
+Resolved: no
+
+[CLAR-008] What is the distinction in customer messaging between business failures vs technical failures, given the requirement says error handling must support both but only specifies 'service unavailable' for service failure?
+Business Impact: Without defined messages, customers may receive unclear errors, causing loss of trust and higher support contact rates.
+Resolved: no

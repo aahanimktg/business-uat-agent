@@ -15,6 +15,30 @@ export const ReviewStatusSchema = z.enum([
   "removed"
 ]);
 
+export const TestDataSchema = z.object({
+  name: z.string(),
+  value: z.union([z.string(), z.number(), z.boolean()]),
+});
+
+export const CoverageSchema = z.object({
+  coverageSummary: z.string().default(""),
+  coveragePercentage: z.number().min(0).max(100).default(0),
+  coverageReason: z.string().default(""),
+  coveredAreas: z.array(z.string()).default([]),
+  missingAreas: z.array(z.string()).default([]),
+});
+
+export const AutomationReadinessSchema = z.object({
+  score: z.number().min(0).max(100).default(0),
+  reason: z.string().default(""),
+});
+
+export const TestCaseReviewStatusSchema = z.enum([
+  "pending",
+  "approved",
+  "rejected",
+]);
+
 export const TestCaseSchema = z.object({
   id: z.string(),
   title: z.string().min(1),
@@ -23,9 +47,17 @@ export const TestCaseSchema = z.object({
   type: TestTypeSchema,
   priority: TestPrioritySchema,
   objective: z.string().min(1),
+  reviewStatus: TestCaseReviewStatusSchema.default("pending"),
+  confidence: z.number().min(0).max(100).optional(),
+  confidenceReason: z.string().default("").optional(),
+  test_data: z.array(TestDataSchema).default([]).optional(),
   preconditions: z.array(z.string()).default([]),
   steps: z.array(z.string()).default([]),
   expectedOutcome: z.string().min(1),
+  automationFeasibility: z
+    .enum(["fully-automatable", "partially-automatable", "manual-only"])
+    .optional(),
+  automationReason: z.string().optional(),
 });
 
 export const ClarificationSchema = z.object({
@@ -47,12 +79,24 @@ export const TestPlanSchema = z.object({
   storyId: z.string(),
   title: z.string(),
   version:z.number().default(1),
+  coverage: CoverageSchema.default({
+    coverageSummary: "",
+    coveragePercentage: 0,
+    coverageReason: "",
+    coveredAreas: [],
+    missingAreas: [],
+  }).optional(),
+  automationReadiness: AutomationReadinessSchema.default({
+    score: 0,
+    reason: "",
+  }).optional(),
   testCases: z.array(TestCaseSchema).default([]),
   clarifications: z.array(ClarificationSchema).default([]),
   status:ReviewStatusSchema.default("draft"),
   coverageSummary: z.string().default(""),
   generatedOn:z.string().optional(),
-  updatedOn:z.string().optional()
+  updatedOn:z.string().optional(),
+  jiraUpdatedAt:z.string().optional()
 });
 
 export const FeedbackHistorySchema =z.object({

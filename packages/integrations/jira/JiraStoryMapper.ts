@@ -103,6 +103,18 @@ export class StoryMapper {
     return issues.map(this.map.bind(this));
   }
 
+  static toRequirement(story: Story) {
+    return {
+      storyId: story.id,
+      title: story.title,
+      description: story.description,
+      acceptanceCriteria: this.extractAcceptanceCriteria(
+        story.acceptanceCriteria || "",
+        story.description,
+      ),
+    };
+  }
+
   static normalizeText(text: string): string {
 
   return text

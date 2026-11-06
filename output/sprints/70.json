@@ -1,0 +1,102 @@
+{
+  "sprintId": 70,
+  "stories": {
+    "AIT-8": {
+      "key": "AIT-8",
+      "id": "10043",
+      "summary": "Passenger Management & Cabin Selection",
+      "updated": "2026-11-03T13:56:25.738+0530",
+      "requirement": {
+        "storyId": "AIT-8",
+        "title": "Passenger Management & Cabin Selection",
+        "description": "DescriptionAs a customer,\nI want to configure passengers and cabin preferences,\nso that pricing and availability can be calculated correctly.\nDetailsPassenger categories shall include:\nAdult (12+ Years)\n\nChild (2-11 Years)\n\nInfant (Below 2 Years)\n\nInfant With Seat (Below 2 Years)\n\nCustomer shall be able to increase or decrease passenger counts.\n\nPassenger summary shall update dynamically.\n\nCustomer shall be able to select:\nEconomy\n\nBusiness\n\nFirst\n\nAdditional RequirementsEconomy shall be selected by default.\n\nOnly one cabin class can be selected at a time.\n\nPassenger validations shall be evaluated before search execution.\n\nUser StoryAs a customer, when booking flights, I want to configure passengers and cabin preferences so that search results accurately reflect my travel requirements.\nContextPassenger configuration directly impacts fare calculation, availability, taxes, and airline operational rules.\nAcceptance CriteriaMinimum one Adult passenger must be present.\n\nMaximum occupied seats allowed per booking shall be 9.\n\nOccupied seats shall include:\nAdults\n\nChildren\n\nInfants With Seat\n\nInfant count must not exceed Adult count.\n\nOne Adult can accompany only one Infant.\n\nSearch must not proceed if:\nAdult count is zero.\n\nInfant count exceeds Adult count.\n\nTotal occupied seats exceed nine.\n\nCustomer must be able to select Economy, Business, or First cabin.\n\nEconomy must be selected by default.",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "description": "Minimum one Adult passenger must be present. Maximum occupied seats allowed per booking shall be"
+          },
+          {
+            "id": "AC2",
+            "description": "Occupied seats shall include: Adults Children Infants With Seat Infant count must not exceed Adult count. One Adult can accompany only one Infant. Search must not proceed if: Adult count is zero. Infant count exceeds Adult count. Total occupied seats exceed nine. Customer must be able to select Economy, Business, or First cabin. Economy must be selected by default."
+          }
+        ]
+      },
+      "firstSeenAt": "2026-11-03T08:48:28.437Z",
+      "lastSyncedAt": "2026-11-06T10:01:03.948Z",
+      "isNew": false,
+      "inSprint": true
+    },
+    "AIT-10": {
+      "key": "AIT-10",
+      "id": "10045",
+      "summary": "Guided Search Validation & Flight Availability Search",
+      "updated": "2026-11-03T13:56:26.004+0530",
+      "firstSeenAt": "2026-11-03T08:48:28.437Z",
+      "lastSyncedAt": "2026-11-03T20:33:25.014Z",
+      "isNew": false,
+      "inSprint": false
+    },
+    "AIT-9": {
+      "key": "AIT-9",
+      "id": "10044",
+      "summary": "Promo Code, Loyalty Booking & Fare Configuration",
+      "updated": "2026-11-03T13:56:26.264+0530",
+      "firstSeenAt": "2026-11-03T08:48:28.437Z",
+      "lastSyncedAt": "2026-11-03T20:33:25.014Z",
+      "isNew": false,
+      "inSprint": false
+    },
+    "AIT-6": {
+      "key": "AIT-6",
+      "id": "10041",
+      "summary": "Flight Search & Journey Planning",
+      "updated": "2026-11-03T13:56:26.449+0530",
+      "requirement": {
+        "storyId": "AIT-6",
+        "title": "Flight Search & Journey Planning",
+        "description": "DescriptionAs a customer,\nI want to search for flights using Round Trip, One-Way, Multi-City, and Open-Jaw journey types,\nso that I can discover available flights based on my travel requirements and proceed with booking.\nDetailsFlight Search widget shall be available on the homepage and booking landing pages.\n\nCustomer shall be able to search flights using:\nRound Trip\n\nOne Way\n\nMulti-City\n\nRound Trip shall be selected by default.\n\nSearch widget shall contain:\nOrigin\n\nDestination\n\nTravel Date(s)\n\nGuests & Cabin\n\nPromo Code (Optional)\n\nSearch Button\n\nAirport search shall support:\nAirport Code\n\nAirport Name\n\nCity Name\n\nSystem shall display:\nAirport suggestions\n\nPopular destinations\n\nNearby airports\n\nNearby airport recommendations shall be configurable by country.\n\nOrigin and Destination airports must be different.\n\nOnly active airports shall be available for booking.\n\nSearch widget shall support desktop, tablet, and mobile devices.\n\nAdditional RequirementsAirport suggestions shall load dynamically while typing.\n\nPopular destinations shall be displayed when no search criteria is entered.\n\nNearby airport recommendations shall be configurable through CMS/business configuration.\n\nSearch widget shall retain selected values until user modifies them.\n\nSearch components shall meet accessibility standards.\n\nUser StoriesStory 1As a customer, when I start planning a trip, I want to search and select departure and destination airports so that I can define my travel route.\nStory 2As a customer, when searching for flights, I want airport suggestions and nearby airport recommendations so that I can easily find suitable travel options.\nContextFlight Search is the primary entry point of the booking journey. Customers must be able to search flights across supported journey types while adhering to airline routing and airport validation rules.\nAcceptance CriteriaFlight Search widget must support Round Trip, One-Way, and Multi-City journeys.\n\nRound Trip must be selected by default.\n\nOrigin airport must be mandatory.\n\nDestination airport must be mandatory.\n\nOrigin and Destination airports must not be identical.\n\nAirport search must support Airport Code, Airport Name, and City Name.\n\nPopular destinations must be displayed when applicable.\n\nNearby airport suggestions must be configurable by country.\n\nOnly active airports must be selectable.\n\nSearch widget must be responsive across supported devices.",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "description": "Flight Search widget must support Round Trip, One-Way, and Multi-City journeys. Round Trip must be selected by default. Origin airport must be mandatory. Destination airport must be mandatory. Origin and Destination airports must not be identical. Airport search must support Airport Code, Airport Name, and City Name. Popular destinations must be displayed when applicable. Nearby airport suggestions must be configurable by country. Only active airports must be selectable. Search widget must be responsive across supported devices."
+          }
+        ]
+      },
+      "firstSeenAt": "2026-11-03T08:48:28.437Z",
+      "lastSyncedAt": "2026-11-06T10:01:03.948Z",
+      "isNew": false,
+      "inSprint": true
+    },
+    "AIT-7": {
+      "key": "AIT-7",
+      "id": "10042",
+      "summary": "Travel Dates, Flexible Search & Multi-City Configuration",
+      "updated": "2026-11-03T13:56:26.641+0530",
+      "firstSeenAt": "2026-11-03T08:48:28.437Z",
+      "lastSyncedAt": "2026-11-03T20:33:25.014Z",
+      "isNew": false,
+      "inSprint": false
+    },
+    "AIT-12": {
+      "key": "AIT-12",
+      "id": "10047",
+      "summary": "Display Red Eye flights (00:00–02:59) in a dedicated Next Day Departure section on search results",
+      "updated": "2026-11-04T02:01:17.689+0530",
+      "requirement": {
+        "storyId": "AIT-12",
+        "title": "Display Red Eye flights (00:00–02:59) in a dedicated Next Day Departure section on search results",
+        "description": "When flight search results include Red Eye options departing after midnight and before 03:00 AM in the local time of the departure station, these flights must be clearly identified as next-day departures. On the flight selection/search results page, the experience should separate these eligible flights from flights belonging to the user-selected travel date by grouping them under a dedicated \"Next Day Departure\" section while still allowing users to view flight details and fare options.\nAcceptance Criteria:\n- Given the user is on the flight search results/selection page and results contain at least one flight departing after 12:00 AM and before 03:00 AM local departure-station time, a dedicated \"Next Day Departure\" section is displayed\n- Flights departing after 12:00 AM and before 03:00 AM local departure-station time are grouped within the \"Next Day Departure\" section\n- Eligible next-day flights are clearly separated from flights belonging to the selected travel date\n- Flight details remain available for flights displayed in the \"Next Day Departure\" section\n- Fare options remain available for flights displayed in the \"Next Day Departure\" section",
+        "acceptanceCriteria": [
+          {
+            "id": "AC1",
+            "description": ": - Given the user is on the flight search results/selection page and results contain at least one flight departing after 12:00 AM and before 03:00 AM local departure-station time, a dedicated \"Next Day Departure\" section is displayed - Flights departing after 12:00 AM and before 03:00 AM local departure-station time are grouped within the \"Next Day Departure\" section - Eligible next-day flights are clearly separated from flights belonging to the selected travel date - Flight details remain available for flights displayed in the \"Next Day Departure\" section - Fare options remain available for flights displayed in the \"Next Day Departure\" section"
+          }
+        ]
+      },
+      "firstSeenAt": "2026-11-03T20:31:40.705Z",
+      "lastSyncedAt": "2026-11-03T20:33:25.014Z",
+      "isNew": false,
+      "inSprint": false
+    }
+  }
+}

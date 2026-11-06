@@ -20,4 +20,18 @@ export class JiraClient {
     if (!response.ok) {throw new Error(`Jira request failed:${response.status}`);}
     return response.json();
   }
+
+  async post(endpoint: string, body: unknown): Promise<any> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      method: 'POST',
+      headers: { ...this.headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(`Jira request failed:${response.status} ${errorBody}`);
+    }
+    if (response.status === 204) return null;
+    return response.json();
+  }
 }

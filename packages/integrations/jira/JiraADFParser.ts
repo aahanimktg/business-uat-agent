@@ -55,4 +55,41 @@ export class JiraADFParser {
       return "";
     }
   }
+
+  // Converts plain text (paragraphs separated by blank lines, lines starting with
+  // "- " treated as bullets) into the Atlassian Document Format Jira's v3 API requires.
+  static textToAdf(text: string) {
+    const blocks = (text || "").split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
+
+    const content = blocks.map((block) => {
+      const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+      const isBulletList = lines.length > 0 && lines.every((l) => /^[-*]\s+/.test(l));
+
+      if (isBulletList) {
+        return {
+          type: "bulletList",
+          content: lines.map((l) => ({
+            type: "listItem",
+            content: [
+              {
+                type: "paragraph",
+                content: [{ type: "text", text: l.replace(/^[-*]\s+/, "") }],
+              },
+            ],
+          })),
+        };
+      }
+
+      return {
+        type: "paragraph",
+        content: [{ type: "text", text: block }],
+      };
+    });
+
+    return {
+      type: "doc",
+      version: 1,
+      content: content.length > 0 ? content : [{ type: "paragraph", content: [] }],
+    };
+  }
 }

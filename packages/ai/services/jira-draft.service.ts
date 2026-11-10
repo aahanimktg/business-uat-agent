@@ -1,7 +1,7 @@
 import { AIProvider } from "../providers/AIProvider";
 import { StructuredResponseService } from "./structured-response.service";
 import { buildJiraDraftPrompt } from "../prompts/jira-draft.prompt";
-import { JiraDraft, JiraDraftSchema } from "../schemas/jira-draft.schema";
+import { JiraDraft, JiraDraftSchema } from "../../domain/schemas/jira-draft.schema";
 
 export class JiraDraftService {
   constructor(

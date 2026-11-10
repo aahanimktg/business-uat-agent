@@ -1,0 +1,949 @@
+{
+  "sprintId": 70,
+  "status": "in-review",
+  "stories": [
+    {
+      "storyId": "AIT-8",
+      "title": "Passenger Management & Cabin Selection",
+      "version": 2,
+      "coverage": {
+        "coverageSummary": "Covers default cabin selection, exclusive cabin selection, passenger seat-limit rules, infant-to-adult rules (applies separately to Infant and Infant With Seat), search gating by required fields, and that search is prevented when passenger rules are violated via disabled increment controls. Also covers airport suggestion selection requirement for Origin/Destination.",
+        "coveragePercentage": 100,
+        "coverageReason": "Acceptance criteria provided: 2 (AC1, AC2). Existing test cases cover AC1 and AC2; updates incorporate clarified UI behaviors (disabled increment controls) and airport suggestion selection requirement without reducing coverage.",
+        "coveredAreas": [
+          "Economy selected by default",
+          "Only one cabin class selectable at a time (Economy/Business/First)",
+          "Minimum 1 adult enforced (cannot be 0 / search prevented)",
+          "Maximum occupied seats = 9 (Adults + Children + Infants with Seat) enforced / search prevented when exceeded",
+          "Infant count must not exceed Adult count / search prevented when exceeded",
+          "Passenger validations evaluated before search execution",
+          "Guest & Cabin access gated by selecting Origin and Destination",
+          "Airport must be selected from suggestions after typing in Origin/Destination search fields",
+          "Passenger rule violations handled by disabling relevant increment controls",
+          "Search requires required fields to be filled (Trip type, Origin, Destination, Cabin & Guest, Travel Dates)"
+        ],
+        "missingAreas": []
+      },
+      "automationReadiness": {
+        "score": 72,
+        "reason": "Clarified behavior indicates passenger rule violations disable the relevant increment controls, improving determinism for automation. Automation feasibility still depends on stable locators for increment/decrement controls, visible passenger counts, and a reliable way to select airports from the suggestions list. Search gating by required fields can be asserted via disabled Search or lack of navigation if consistently implemented."
+      },
+      "testCases": [
+        {
+          "id": "TC-001",
+          "title": "Default cabin is Economy when Guests & Cabin opens after selecting destination",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Confirm the default cabin selection is Economy so the customer starts from the expected baseline for pricing and availability.",
+          "reviewStatus": "pending",
+          "confidence": 72,
+          "confidenceReason": "Default cabin rule is explicit; however, the exact UI label/value shown for the selected cabin may vary (radio selected state vs summary text), impacting assertion stability.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Verify Economy is enabled",
+            "Verify Economy is visible"
+          ],
+          "expectedOutcome": "After selecting a destination from suggestions, the Guests & Cabin control/popup is available and Economy is the default cabin option presented to the customer.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Selecting an airport from suggestions is automatable if suggestion items have stable locators. Verifying 'default selected' state may require a UI-specific indicator (selected radio state or summary value) that might not be directly assertable without a stable visible value; the case is still largely automatable if the UI exposes a readable selected value."
+        },
+        {
+          "id": "TC-002",
+          "title": "Customer can switch cabin to Business and only one cabin remains selected",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Ensure the customer can choose Business cabin and that cabin selection is mutually exclusive to avoid conflicting fare calculations.",
+          "reviewStatus": "pending",
+          "confidence": 63,
+          "confidenceReason": "Cabin options are explicitly defined, but confirming exclusivity requires an observable selected state or summary text that may differ by UI.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            },
+            {
+              "name": "expectedCabin",
+              "value": "Business"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click Business",
+            "Verify Business is visible",
+            "Verify Economy is visible"
+          ],
+          "expectedOutcome": "Customer can select Business cabin, and the booking widget maintains a single cabin selection at a time (no conflicting cabin selections).",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Clicking a cabin is automatable, but proving mutual exclusivity typically requires asserting the selected state (not just visibility), which may not be exposed as a stable visible value in all implementations."
+        },
+        {
+          "id": "TC-003",
+          "title": "Customer can switch cabin to First and only one cabin remains selected",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Ensure First cabin can be selected as the customer's preference and remains exclusive to avoid incorrect search criteria.",
+          "reviewStatus": "pending",
+          "confidence": 63,
+          "confidenceReason": "Cabin list is explicit; like other cabin tests, exclusivity may be difficult to assert without a stable visible selected-state indicator.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            },
+            {
+              "name": "expectedCabin",
+              "value": "First"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click First",
+            "Verify First is visible",
+            "Verify Economy is visible"
+          ],
+          "expectedOutcome": "Customer can select First cabin, and the booking widget maintains a single cabin selection at a time.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Selecting First is automatable; confirming exclusivity may require a selected-state assertion not guaranteed to be available as a stable visible text/value."
+        },
+        {
+          "id": "TC-004",
+          "title": "Adult minimum enforced: adult count cannot be reduced below 1 in Guests & Cabin",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "boundary",
+          "priority": "high",
+          "objective": "Protect against invalid passenger configurations by ensuring at least one adult is always present.",
+          "reviewStatus": "pending",
+          "confidence": 55,
+          "confidenceReason": "Rule is explicit, but the exact control name for decreasing adults and the exposed adult count value may vary; the UI may indicate the disabled state rather than allowing decrement attempts.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            },
+            {
+              "name": "expectedAdultCountMinimum",
+              "value": "1"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Verify Decrease adults is disabled",
+            "Verify Adults value equals 1"
+          ],
+          "expectedOutcome": "Guests & Cabin prevents the customer from reducing adults below 1; the decrease control is disabled at 1 and the adult count remains 1.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if the UI provides accessible control names like 'Decrease adults' and a readable adults count value; otherwise the agent may not be able to reliably assert the disabled state/value."
+        },
+        {
+          "id": "TC-005",
+          "title": "Infant count cannot exceed adult count (attempt to add more infants than adults)",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Ensure the booking widget prevents an invalid infant-to-adult pairing to comply with operational rules.",
+          "reviewStatus": "pending",
+          "confidence": 58,
+          "confidenceReason": "Clarification confirms the system disables the relevant increment controls when the infant > adult rule would be violated; remaining uncertainty is the exact UI labeling for Infant vs Infant With Seat controls if both are present.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            },
+            {
+              "name": "adults",
+              "value": "1"
+            },
+            {
+              "name": "infants",
+              "value": "2"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click Increase infants",
+            "Verify Infants value equals 1",
+            "Verify Increase infants is disabled"
+          ],
+          "expectedOutcome": "The booking widget prevents configuring infants greater than adults by disabling the relevant infant increment control when the next increment would exceed the adult count.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if the UI exposes a stable 'Increase infants' control, reliably disabled state, and a readable infant count value; if Infant and Infant With Seat are distinct controls, automation must target the correct one by stable labels."
+        },
+        {
+          "id": "TC-006",
+          "title": "Seat limit enforced: occupied seats cannot exceed 9 (Adults + Children + Infants with Seat)",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "boundary",
+          "priority": "high",
+          "objective": "Ensure the customer cannot configure more than 9 occupied seats for a single booking search.",
+          "reviewStatus": "pending",
+          "confidence": 56,
+          "confidenceReason": "Clarification confirms the system disables relevant increment controls at the limit; remaining variability is which passenger type increment(s) are disabled depending on current mix and whether multiple controls contribute to the seat total.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            },
+            {
+              "name": "targetOccupiedSeats",
+              "value": "9"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Verify Adults value equals 9",
+            "Verify Increase adults is disabled"
+          ],
+          "expectedOutcome": "Customer can configure up to 9 occupied seats, and the booking widget prevents increasing occupied seats beyond 9 by disabling the relevant increment controls once the occupied-seat total reaches 9.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if increment controls and counts are consistently labeled and the UI disables further increments at the limit; if the seat limit can be reached through different passenger mixes, automation may need to validate multiple increment controls are disabled depending on mix."
+        },
+        {
+          "id": "TC-007",
+          "title": "Guests & Cabin selection is blocked until both origin and destination are selected",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "medium",
+          "objective": "Prevent passenger/cabin configuration without a defined route, aligning with the booking widget journey gating behavior.",
+          "reviewStatus": "pending",
+          "confidence": 80,
+          "confidenceReason": "Domain context explicitly states Guests & Cabin cannot be accessed until both Origin and Destination are selected; observable via control disabled state or inability to open.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Guests & Cabin",
+            "Verify Guests & Cabin is not visible",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Guests & Cabin",
+            "Verify Guests & Cabin is not visible"
+          ],
+          "expectedOutcome": "The customer cannot open Guests & Cabin until both origin and destination are selected; the popup/control remains blocked when either field is missing.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Relies on simple click and visibility assertions; selecting origin from suggestions is automatable if the suggestions list is accessible."
+        },
+        {
+          "id": "TC-008",
+          "title": "Search does not proceed when required passenger validation is not satisfied (exceeds 9 occupied seats)",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Confirm passenger validations are evaluated before search execution and prevent navigating to results when occupied seats exceed 9.",
+          "reviewStatus": "pending",
+          "confidence": 52,
+          "confidenceReason": "Clarification indicates the system disables relevant increment controls, making it less likely that an invalid state can be reached; this test primarily validates that Search cannot proceed with missing required fields or invalid passenger configuration attempts.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Click Increase adults",
+            "Verify Adults value equals 9",
+            "Verify Increase adults is disabled",
+            "Click Search",
+            "Verify Guests & Cabin is visible"
+          ],
+          "expectedOutcome": "When passenger rules cannot be satisfied due to the occupied-seat maximum, the widget prevents further increases via disabled increment controls and does not proceed with Search until all required fields are valid and complete.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Disabled increment controls and visible passenger counts are automatable assertions. Proving 'Search does not proceed' may depend on a stable signal (e.g., Search button disabled or no navigation) that must be consistent across environments."
+        },
+        {
+          "id": "TC-009",
+          "title": "Infant With Seat count cannot exceed adult count (attempt to add more Infant With Seat than adults)",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Verify the clarified rule that the infant-to-adult limit applies separately to Infant With Seat, preventing invalid configurations.",
+          "reviewStatus": "pending",
+          "confidence": 50,
+          "confidenceReason": "Rule scope is clarified, but the exact UI naming and presence of a distinct 'Infant With Seat' control may vary; assertion depends on accessible labels and disabled-state exposure.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Select Abu Dhabi from Origin suggestions",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Select London from Destination suggestions",
+            "Verify Guests & Cabin is visible",
+            "Click Increase Infant With Seat",
+            "Verify Infant With Seat value equals 1",
+            "Verify Increase Infant With Seat is disabled"
+          ],
+          "expectedOutcome": "The booking widget prevents configuring Infant With Seat greater than adults by disabling the relevant Infant With Seat increment control when the next increment would exceed the adult count.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if a distinct Infant With Seat control exists with stable locators and exposes disabled state and count value."
+        },
+        {
+          "id": "TC-010",
+          "title": "Airport selection is required from suggestions after typing in Origin and Destination fields",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Ensure the route is not considered selected until the user picks an airport from the suggestions list, preventing invalid or partial input.",
+          "reviewStatus": "pending",
+          "confidence": 62,
+          "confidenceReason": "Feedback explicitly states airport selection from suggestions is required; the observable behavior is typically that dependent controls remain blocked until selection is made.",
+          "test_data": [
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "London"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Do not select any Origin suggestion",
+            "Click Destination field",
+            "Enter London in Destination field",
+            "Do not select any Destination suggestion",
+            "Click Guests & Cabin",
+            "Verify Guests & Cabin is not visible"
+          ],
+          "expectedOutcome": "Typing in Origin/Destination without selecting an airport from suggestions does not complete the route selection; Guests & Cabin remains blocked until valid airports are selected from suggestions.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Relies on controlled user actions (type vs select suggestion) and a deterministic UI outcome (Guests & Cabin remains blocked)."
+        }
+      ],
+      "clarifications": [],
+      "status": "approved",
+      "coverageSummary": "Covers default cabin selection, exclusive cabin selection, passenger seat-limit rules, infant-to-adult rules (including Infant With Seat), and that search is prevented when passenger rules are violated via disabled increment controls. Also includes airport suggestion selection requirement for route completion.",
+      "generatedOn": "2026-11-09T11:56:37.213Z",
+      "jiraUpdatedAt": "2026-11-03T13:56:25.738+0530"
+    },
+    {
+      "storyId": "AIT-6",
+      "title": "Flight Search & Journey Planning",
+      "version": 1,
+      "coverage": {
+        "coverageSummary": "Core flight-search widget journey types and key validations are covered, including default Round Trip, mandatory fields behavior via guided completion, airport search by code/name/city, origin-destination invalid combinations, popular destinations display, and basic responsiveness checks. Coverage for 'only active airports selectable' and 'nearby airport suggestions configurable by country' is partial due to missing controlled test data and observable configuration cues.",
+        "coveragePercentage": 75,
+        "coverageReason": "Single acceptance criterion (AC1) contains multiple distinct business requirements; coveragePercentage reflects coverage of 9 distinct requirement areas derived from AC1, with 7 addressed by at least one test case and 2 only partially verifiable without controlled data/config (active airport restriction; country-configurable nearby recommendations).",
+        "coveredAreas": [
+          "Journey types supported: Round Trip, One Way, Multi City",
+          "Round Trip selected by default",
+          "Origin and Destination mandatory via guided completion when searching",
+          "Origin and Destination must not be identical (and same-city/country routing constraints as per domain context)",
+          "Airport search supports code, airport name, and city name",
+          "Popular destinations are shown when Destination field opened without typing",
+          "Selected values retained until user modifies them (destination cleared when origin changes after destination selected)",
+          "Responsive behavior (basic viewport-based checks)",
+          "Successful search navigates to search results page when required fields are valid"
+        ],
+        "missingAreas": [
+          "Only active airports must be selectable (requires explicit inactive-airport test data or an observable indicator of inactivity in suggestions)",
+          "Nearby airport suggestions configurable by country (requires ability to set/know country context and expected recommendation behavior per country)"
+        ]
+      },
+      "automationReadiness": {
+        "score": 72,
+        "reason": "Most journeys and validations are automatable using supported navigation/click/fill and SRP URL assertion. However, airport suggestion labels vary by locale and data, and two key criteria (inactive airports; country-configurable nearby recommendations) need controlled business test data or an observable configuration outcome to be reliably automated."
+      },
+      "testCases": [
+        {
+          "id": "TC-001",
+          "title": "Round Trip is selected by default on initial load",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Confirm the default journey type is Round Trip when the flight search widget loads so the customer starts in the expected flow.",
+          "reviewStatus": "pending",
+          "confidence": 70,
+          "confidenceReason": "Domain context states Round Trip is default; exact visible label for the selected state may vary, making UI assertion dependent on how the control is presented.",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Verify Round Trip is visible",
+            "Verify Round Trip is enabled"
+          ],
+          "expectedOutcome": "The flight search widget loads with Round Trip available and presented as the default journey type selection.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Whether Round Trip is the default may require verifying a selected state that is not exposed as stable visible text/value across devices; visibility/enabled checks are automatable but may not conclusively prove selection in all UI implementations."
+        },
+        {
+          "id": "TC-002",
+          "title": "One Way journey type can be selected for flight search planning",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Validate that a customer can switch the journey type to One Way to plan a one-way trip.",
+          "reviewStatus": "pending",
+          "confidence": 65,
+          "confidenceReason": "Journey type support is explicit, but exact control labels and selection indication may vary; this test confirms availability and basic interaction.",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click One Way",
+            "Verify One Way is visible",
+            "Verify One Way is enabled"
+          ],
+          "expectedOutcome": "The customer can select One Way as the journey type in the flight search widget.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Selection state may not be directly verifiable with a stable visible assertion across layouts; the click action is automatable."
+        },
+        {
+          "id": "TC-003",
+          "title": "Multi City journey type can be selected for flight search planning",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Validate that a customer can switch the journey type to Multi City to plan a multi-segment itinerary.",
+          "reviewStatus": "pending",
+          "confidence": 60,
+          "confidenceReason": "Multi City is in scope, but the widget may render different segment fields with varying labels; verification is limited to the presence of Multi City selection and basic follow-on field visibility.",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Multi City",
+            "Verify Multi City is visible",
+            "Verify Flight 1 is visible"
+          ],
+          "expectedOutcome": "The customer can select Multi City and is presented with the first segment inputs needed to begin building a multi-city itinerary.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "The label for the first segment container/field may differ (e.g., 'Flight 1', 'Segment 1'); if not present as exact visible text, the agent may be unable to assert reliably."
+        },
+        {
+          "id": "TC-004",
+          "title": "Search guides customer to complete Origin when Origin is missing",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Confirm that Origin is mandatory and that attempting to search without it triggers guided completion rather than executing a search.",
+          "reviewStatus": "pending",
+          "confidence": 55,
+          "confidenceReason": "Domain context states search opens relevant incomplete component, but the exact component title/text is not specified; verification relies on observable UI state (origin input becoming active/visible).",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Search",
+            "Verify Origin is visible",
+            "Verify Origin is enabled"
+          ],
+          "expectedOutcome": "When the customer tries to search without an Origin, the widget does not execute the search and instead opens/guides the customer to the Origin input to complete it.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "The system behavior is to open an incomplete component, but without specified text/URL change it can be difficult to prove search was not executed beyond checking the Origin component is presented."
+        },
+        {
+          "id": "TC-005",
+          "title": "Search guides customer to complete Destination when Destination is missing",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Confirm that Destination is mandatory and that attempting to search with only Origin triggers guided completion for Destination.",
+          "reviewStatus": "pending",
+          "confidence": 55,
+          "confidenceReason": "Exact destination prompt/validation messages are unspecified; verification focuses on the Destination control visibility and enabled state after search attempt.",
+          "test_data": [
+            {
+              "name": "originQuery",
+              "value": "Abu Dhabi"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin",
+            "Enter Abu Dhabi in Origin",
+            "Click Search",
+            "Verify Destination is visible",
+            "Verify Destination is enabled"
+          ],
+          "expectedOutcome": "When the customer tries to search without a Destination, the widget does not execute the search and instead opens/guides the customer to complete Destination selection.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Airport suggestion selection is data-driven and the exact suggestion label is unknown; this case avoids selecting a specific origin suggestion, which may leave origin unconfirmed depending on UI behavior."
+        },
+        {
+          "id": "TC-006",
+          "title": "Destination field shows popular destinations when opened without typing",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Verify that popular destination options are presented when the customer opens the Destination field with no search text entered.",
+          "reviewStatus": "pending",
+          "confidence": 45,
+          "confidenceReason": "Requirement states popular destinations should be displayed, but does not specify the exact text labels of the popular destinations or a stable heading to assert.",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Destination",
+            "Verify Popular destinations is visible"
+          ],
+          "expectedOutcome": "Opening the Destination field without entering search criteria displays popular destination options to help the customer choose quickly.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Requires a stable visible heading/label such as 'Popular destinations'; if the UI uses different wording or no heading, automated assertion may fail."
+        },
+        {
+          "id": "TC-007",
+          "title": "Airport search supports entry by airport code (customer can type a code to find airports)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Confirm that the airport search field accepts airport code input as a supported search method.",
+          "reviewStatus": "pending",
+          "confidence": 40,
+          "confidenceReason": "The requirement supports code input, but no controlled suggestion labels are provided to assert; validation is limited to entering text and observing suggestion content if present.",
+          "test_data": [
+            {
+              "name": "originCodeQuery",
+              "value": "AUH"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin",
+            "Enter AUH in Origin",
+            "Verify Origin is enabled"
+          ],
+          "expectedOutcome": "The customer can enter an airport code into the Origin field as a supported search input type.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Without specified suggestion text, the automation cannot reliably assert that dynamic airport suggestions loaded for the code; it can only confirm the field accepts the input."
+        },
+        {
+          "id": "TC-008",
+          "title": "Airport search supports entry by airport name (customer can type an airport name to find airports)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Confirm that the airport search field accepts airport name input as a supported search method.",
+          "reviewStatus": "pending",
+          "confidence": 40,
+          "confidenceReason": "Airport-name support is specified, but expected suggestion labels are not; automation is limited to input acceptance.",
+          "test_data": [
+            {
+              "name": "destinationNameQuery",
+              "value": "Heathrow"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Destination",
+            "Enter Heathrow in Destination",
+            "Verify Destination is enabled"
+          ],
+          "expectedOutcome": "The customer can enter an airport name into the Destination field as a supported search input type.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Cannot reliably verify suggestion correctness without known exact suggestion text for selection/assertion."
+        },
+        {
+          "id": "TC-009",
+          "title": "Airport search supports entry by city name (customer can type a city to find airports and nearby airports)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Confirm that the airport search accepts city input and presents a path to select airports for that city (and potentially nearby airports).",
+          "reviewStatus": "pending",
+          "confidence": 35,
+          "confidenceReason": "City-name support is specified, but the exact city-to-airport mapping, nearby airport behavior, and suggestion text are not provided; outcome is hard to assert without controlled labels.",
+          "test_data": [
+            {
+              "name": "destinationCityQuery",
+              "value": "London"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Destination",
+            "Enter London in Destination",
+            "Verify Destination is enabled"
+          ],
+          "expectedOutcome": "The customer can enter a city name into the Destination field as a supported search input type to discover airports (and potentially nearby airports) relevant to that city.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Nearby airport recommendations and the specific list content vary by configuration; without exact visible suggestion text, selection and verification are unreliable."
+        },
+        {
+          "id": "TC-010",
+          "title": "Origin and Destination cannot be identical (customer prevented from planning an invalid route)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Validate that the widget prevents selecting the same airport for both Origin and Destination.",
+          "reviewStatus": "pending",
+          "confidence": 30,
+          "confidenceReason": "Rule is explicit, but the validation presentation is handled inside popups and the exact message is not provided; also requires selecting the same exact airport suggestion label which is not provided.",
+          "test_data": [
+            {
+              "name": "airportQuery",
+              "value": "Abu Dhabi"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin",
+            "Enter Abu Dhabi in Origin",
+            "Click Destination",
+            "Enter Abu Dhabi in Destination",
+            "Click Search",
+            "Verify Destination is visible"
+          ],
+          "expectedOutcome": "The customer is prevented from executing a search where Origin and Destination are identical; the system guides the customer to correct the Destination selection rather than proceeding to results.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Without known exact suggestion labels and expected validation text, the automation cannot reliably confirm that the identical-airport selection was actually made and blocked versus being unconfirmed input."
+        },
+        {
+          "id": "TC-011",
+          "title": "Destination is cleared when Origin is changed after Destination was selected",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "boundary",
+          "priority": "medium",
+          "objective": "Reduce risk of mismatched route planning by confirming that changing Origin after choosing Destination forces the customer to reselect Destination.",
+          "reviewStatus": "pending",
+          "confidence": 35,
+          "confidenceReason": "Domain context defines destination auto-clear behavior, but the requirement does not; also requires selecting specific airports to make the state change observable, and exact suggestion labels are unknown.",
+          "test_data": [
+            {
+              "name": "origin1Query",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationQuery",
+              "value": "London"
+            },
+            {
+              "name": "origin2Query",
+              "value": "Dubai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin",
+            "Enter Abu Dhabi in Origin",
+            "Click Destination",
+            "Enter London in Destination",
+            "Click Origin",
+            "Enter Dubai in Origin",
+            "Verify Destination value equals "
+          ],
+          "expectedOutcome": "After the customer changes Origin following a Destination choice, the previously selected Destination is cleared, prompting the customer to reselect Destination for the new Origin.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "This depends on the UI treating the previous destination as 'selected' versus free-text; without selecting exact suggestions, the empty-value assertion may be unreliable."
+        },
+        {
+          "id": "TC-012",
+          "title": "Successful Round Trip search navigates to Search Results Page when all required fields are completed",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Validate the end-to-end primary business outcome: after completing valid required inputs, the customer can execute search and is navigated to SRP.",
+          "reviewStatus": "pending",
+          "confidence": 30,
+          "confidenceReason": "SRP navigation is defined, but completing inputs requires selecting specific airport suggestions and calendar dates, which are not supplied as stable visible labels/dates in the requirement; route/date availability is not controlled.",
+          "test_data": [
+            {
+              "name": "originQuery",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationQuery",
+              "value": "London"
+            },
+            {
+              "name": "departureDate",
+              "value": "2026-12-10"
+            },
+            {
+              "name": "returnDate",
+              "value": "2026-12-20"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Click Origin",
+            "Enter Abu Dhabi in Origin",
+            "Click Destination",
+            "Enter London in Destination",
+            "Click Departure date",
+            "Click 2026-12-10",
+            "Click 2026-12-20",
+            "Click Search",
+            "Verify URL contains search"
+          ],
+          "expectedOutcome": "With valid Origin, Destination, and Round Trip dates provided, search executes and the customer is taken to the Search Results Page (SRP).",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Date click labels may not match ISO format; availability and calendar rendering may differ. SRP URL substring is unknown (only assumed 'search'), so navigation assertion is not stable without an agreed SRP URL pattern."
+        },
+        {
+          "id": "TC-013",
+          "title": "Basic responsive behavior: flight search widget remains usable on mobile viewport",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "boundary",
+          "priority": "medium",
+          "objective": "Confirm the flight search widget remains present and operable in a mobile layout to meet responsiveness requirements.",
+          "reviewStatus": "pending",
+          "confidence": 25,
+          "confidenceReason": "Responsiveness is in scope but the supported step language has no viewport/resolution actions; verification is limited to presence of key controls.",
+          "test_data": [],
+          "preconditions": [],
+          "steps": [
+            "Open application",
+            "Verify Origin is visible",
+            "Verify Destination is visible",
+            "Verify Guests & Cabin is visible",
+            "Verify Search is visible"
+          ],
+          "expectedOutcome": "On supported devices/layouts, the flight search widget remains available and key inputs are accessible to the customer.",
+          "automationFeasibility": "manual-only",
+          "automationReason": "Cannot set tablet/mobile viewport with the supported step actions; true responsive validation requires device emulation or viewport resizing."
+        }
+      ],
+      "clarifications": [
+        {
+          "type": "missing-validation",
+          "id": "CLAR-001",
+          "question": "When Origin and Destination are identical (or in the same city), what exact customer-visible validation outcome is expected inside the popups (e.g., specific message text, disabled suggestion, or forced clearing), and at what point (during selection vs on Search click)?",
+          "businessImpact": "Without the defined validation behavior/message, UAT cannot reliably assert the correct customer guidance for invalid route selection, and automation cannot validate the correct prevention mechanism.",
+          "resolved": false
+        },
+        {
+          "type": "missing-business-rule",
+          "id": "CLAR-002",
+          "question": "For 'Nearby airport suggestions configurable by country', which countries/configurations should be validated in UAT, and what observable differences are expected for those configurations?",
+          "businessImpact": "The requirement is not testable without knowing the intended configuration scenarios and expected recommendation behavior per country; coverage remains partial.",
+          "resolved": false
+        },
+        {
+          "type": "missing-business-rule",
+          "id": "CLAR-003",
+          "question": "Is there controlled UAT data for at least one known inactive airport (code/name) that should be shown as not selectable, or another observable way to prove 'only active airports are selectable'?",
+          "businessImpact": "Without inactive-airport test data or a visible indicator, UAT cannot validate the active-airport restriction and automation cannot prove the rule beyond indirect assumptions.",
+          "resolved": false
+        },
+        {
+          "type": "missing-business-rule",
+          "id": "CLAR-004",
+          "question": "What is the expected stable identifier of the Search Results Page for verification (e.g., URL substring or page heading text) after a successful search?",
+          "businessImpact": "Without a stable SRP identifier, tests cannot reliably confirm that a successful search navigated to results, especially when availability and dynamic content vary.",
+          "resolved": false
+        },
+        {
+          "type": "requirement-ambiguity",
+          "id": "CLAR-005",
+          "question": "The story mentions 'Open-Jaw journey types' in the description, but the acceptance criteria list only Round Trip, One-Way, and Multi-City. Should Open-Jaw be supported and tested as part of this scope?",
+          "businessImpact": "If Open-Jaw is required, current test coverage and widget behavior validation would be incomplete; if not required, the story description should be aligned to avoid scope confusion.",
+          "resolved": false
+        }
+      ],
+      "status": "draft",
+      "coverageSummary": "Core flight-search widget journey types and key validations are covered, including default Round Trip, mandatory fields behavior via guided completion, airport search by code/name/city, origin-destination invalid combinations, popular destinations display, and basic responsiveness checks. Coverage for 'only active airports selectable' and 'nearby airport suggestions configurable by country' is partial due to missing controlled test data and observable configuration cues.",
+      "description": "DescriptionAs a customer,\nI want to search for flights using Round Trip, One-Way, Multi-City, and Open-Jaw journey types,\nso that I can discover available flights based on my travel requirements and proceed with booking.\nDetailsFlight Search widget shall be available on the homepage and booking landing pages.\n\nCustomer shall be able to search flights using:\nRound Trip\n\nOne Way\n\nMulti-City\n\nRound Trip shall be selected by default.\n\nSearch widget shall contain:\nOrigin\n\nDestination\n\nTravel Date(s)\n\nGuests & Cabin\n\nPromo Code (Optional)\n\nSearch Button\n\nAirport search shall support:\nAirport Code\n\nAirport Name\n\nCity Name\n\nSystem shall display:\nAirport suggestions\n\nPopular destinations\n\nNearby airports\n\nNearby airport recommendations shall be configurable by country.\n\nOrigin and Destination airports must be different.\n\nOnly active airports shall be available for booking.\n\nSearch widget shall support desktop, tablet, and mobile devices.\n\nAdditional RequirementsAirport suggestions shall load dynamically while typing.\n\nPopular destinations shall be displayed when no search criteria is entered.\n\nNearby airport recommendations shall be configurable through CMS/business configuration.\n\nSearch widget shall retain selected values until user modifies them.\n\nSearch components shall meet accessibility standards.\n\nUser StoriesStory 1As a customer, when I start planning a trip, I want to search and select departure and destination airports so that I can define my travel route.\nStory 2As a customer, when searching for flights, I want airport suggestions and nearby airport recommendations so that I can easily find suitable travel options.\nContextFlight Search is the primary entry point of the booking journey. Customers must be able to search flights across supported journey types while adhering to airline routing and airport validation rules.\nAcceptance CriteriaFlight Search widget must support Round Trip, One-Way, and Multi-City journeys.\n\nRound Trip must be selected by default.\n\nOrigin airport must be mandatory.\n\nDestination airport must be mandatory.\n\nOrigin and Destination airports must not be identical.\n\nAirport search must support Airport Code, Airport Name, and City Name.\n\nPopular destinations must be displayed when applicable.\n\nNearby airport suggestions must be configurable by country.\n\nOnly active airports must be selectable.\n\nSearch widget must be responsive across supported devices.",
+      "jiraUpdatedAt": "2026-11-03T13:56:26.449+0530",
+      "generatedOn": "2026-11-09T11:56:37.213Z"
+    }
+  ]
+}

@@ -1,0 +1,924 @@
+{
+  "version": 1,
+  "records": {
+    "etihad.en-ae.origin-field": {
+      "key": "etihad.en-ae.origin-field",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Origin field",
+      "locator": {
+        "strategy": "text",
+        "value": "Origin field",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T07:14:16.801Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-ae.flying-from": {
+      "key": "etihad.en-ae.flying-from",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Flying from",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying from",
+        "role": "combobox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T07:20:35.895Z",
+      "lastUsedAt": "2026-11-09T10:01:10.746Z",
+      "reuseCount": 100,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:                   - combobox \"Flying from\" [ref=f11e166] [cursor=pointer]: Kolkata, CCU"
+    },
+    "etihad.en-ae.airport-suggestion-dubai": {
+      "key": "etihad.en-ae.airport-suggestion-dubai",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Airport suggestion \"Dubai\"",
+      "locator": {
+        "strategy": "role",
+        "value": "Dubai United Arab Emirates",
+        "role": "option",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T08:09:22.774Z",
+      "reuseCount": 0,
+      "missCount": 12,
+      "repairCount": 0,
+      "failureCount": 10,
+      "status": "needs_revalidation",
+      "evidence": "Snapshot match:                           - option \"Dubai United Arab Emirates\" [ref=e13659] [cursor=pointer]:"
+    },
+    "etihad.en-ae.flying-to": {
+      "key": "etihad.en-ae.flying-to",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Flying to",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying to",
+        "role": "combobox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T07:21:08.803Z",
+      "lastUsedAt": "2026-11-09T10:01:05.059Z",
+      "reuseCount": 74,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:                     - combobox \"Flying to\" [expanded] [active] [ref=f11e177] [cursor=pointer]"
+    },
+    "etihad.en-ae.search": {
+      "key": "etihad.en-ae.search",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Search",
+      "locator": {
+        "strategy": "role",
+        "value": "Search",
+        "role": "button",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T07:21:45.081Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - button \"Search\" [pressed] [ref=f11e190] [cursor=pointer]"
+    },
+    "etihad.en-ae.message-origin-and-destination-must-be-different": {
+      "key": "etihad.en-ae.message-origin-and-destination-must-be-different",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Message: Origin and Destination must be different",
+      "locator": {
+        "strategy": "text",
+        "value": "Message: Origin and Destination must be different",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T07:21:50.211Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-ae.search-button": {
+      "key": "etihad.en-ae.search-button",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Search button",
+      "locator": {
+        "strategy": "role",
+        "value": "Search",
+        "role": "button",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T07:25:32.233Z",
+      "lastUsedAt": "2026-11-09T09:58:07.507Z",
+      "reuseCount": 6,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - button \"Search\" [pressed] [ref=e199] [cursor=pointer]"
+    },
+    "etihad.en-ae.validation-message": {
+      "key": "etihad.en-ae.validation-message",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Validation message",
+      "locator": {
+        "strategy": "text",
+        "value": "Validation message",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T07:25:37.264Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-ae.airport-suggestions-dubai": {
+      "key": "etihad.en-ae.airport-suggestions-dubai",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Airport suggestions: Dubai",
+      "locator": {
+        "strategy": "role",
+        "value": "Dubai United Arab Emirates",
+        "role": "option",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T07:30:43.343Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "verified",
+      "evidence": "Snapshot match:                           - option \"Dubai United Arab Emirates\" [ref=f6e13663] [cursor=pointer]:"
+    },
+    "etihad.en-ae.dubai-airport-suggestion": {
+      "key": "etihad.en-ae.dubai-airport-suggestion",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Dubai (airport suggestion)",
+      "locator": {
+        "strategy": "role",
+        "value": "Dubai United Arab Emirates",
+        "role": "option",
+        "exact": true,
+        "scope": "listbox \"menu-options\""
+      },
+      "verifiedAt": "2026-11-09T07:52:54.313Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "verified",
+      "evidence": "Snapshot match:                           - option \"Dubai United Arab Emirates\" [ref=e13647] [cursor=pointer]:"
+    },
+    "etihad.en-ae.airport-suggestions-abu-dhabi": {
+      "key": "etihad.en-ae.airport-suggestions-abu-dhabi",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Airport suggestions: Abu Dhabi",
+      "locator": {
+        "strategy": "role",
+        "value": "airport Abu Dhabi, United Arab Emirates Zayed International Airport AUH",
+        "role": "option",
+        "exact": true,
+        "scope": "listbox \"menu-options\""
+      },
+      "verifiedAt": "2026-11-09T08:32:27.202Z",
+      "lastUsedAt": "2026-11-09T08:43:38.576Z",
+      "reuseCount": 6,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:                         - option \"airport Abu Dhabi, United Arab Emirates Zayed International Airport AUH\" [ref=f12e689] [cursor=pointer]:"
+    },
+    "etihad.en-ae.airport-suggestions-mumbai": {
+      "key": "etihad.en-ae.airport-suggestions-mumbai",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Airport suggestions: Mumbai",
+      "locator": {
+        "strategy": "role",
+        "value": "airport Mumbai, India Chhatrapati Shivaji Maharaj Airport BOM",
+        "role": "option",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T08:32:41.359Z",
+      "lastUsedAt": "2026-11-09T08:43:51.822Z",
+      "reuseCount": 6,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:                         - option \"airport Mumbai, India Chhatrapati Shivaji Maharaj Airport BOM\" [ref=f12e14695] [cursor=pointer]:"
+    },
+    "etihad.en-ae.journey-type-one-way": {
+      "key": "etihad.en-ae.journey-type-one-way",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Journey type: One-Way",
+      "locator": {
+        "strategy": "role",
+        "value": "One way",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T08:32:47.438Z",
+      "lastUsedAt": "2026-11-09T08:57:46.206Z",
+      "reuseCount": 6,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - tab \"One way\" [ref=f12e153] [cursor=pointer]"
+    },
+    "etihad.en-ae.journey-type-round-trip": {
+      "key": "etihad.en-ae.journey-type-round-trip",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Journey type: Round Trip",
+      "locator": {
+        "strategy": "role",
+        "value": "Round trip",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T08:32:55.648Z",
+      "lastUsedAt": "2026-11-09T09:48:16.757Z",
+      "reuseCount": 7,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - tab \"Round trip\" [ref=f12e152] [cursor=pointer]"
+    },
+    "etihad.en-ae.one-way-journey-type-option": {
+      "key": "etihad.en-ae.one-way-journey-type-option",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "One-Way journey type option",
+      "locator": {
+        "strategy": "role",
+        "value": "One way",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T08:36:17.478Z",
+      "lastUsedAt": "2026-11-09T10:01:09.100Z",
+      "reuseCount": 6,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - tab \"One way\" [ref=e153] [cursor=pointer]"
+    },
+    "etihad.en-ae.round-trip-journey-type-option": {
+      "key": "etihad.en-ae.round-trip-journey-type-option",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Round Trip journey type option",
+      "locator": {
+        "strategy": "role",
+        "value": "Round trip",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T08:36:21.673Z",
+      "lastUsedAt": "2026-11-09T10:01:57.335Z",
+      "reuseCount": 3,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Snapshot match:           - tab \"Round trip\" [ref=e152] [cursor=pointer]"
+    },
+    "etihad.en-ae.journey-type": {
+      "key": "etihad.en-ae.journey-type",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Journey type",
+      "locator": {
+        "strategy": "role",
+        "value": "Round trip",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T09:43:09.976Z",
+      "lastUsedAt": "2026-11-09T10:02:00.106Z",
+      "reuseCount": 4,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-ae.multi-city-journey-type-option": {
+      "key": "etihad.en-ae.multi-city-journey-type-option",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Multi-City journey type option",
+      "locator": {
+        "strategy": "role",
+        "value": "Multi-city",
+        "role": "tab",
+        "exact": true,
+        "scope": "tablist"
+      },
+      "verifiedAt": "2026-11-09T09:43:34.890Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "needs_revalidation",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-ae.airport-suggestions": {
+      "key": "etihad.en-ae.airport-suggestions",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Airport suggestions",
+      "locator": {
+        "strategy": "role",
+        "value": "menu-options",
+        "role": "listbox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T09:45:26.066Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-ae.nearby-airports": {
+      "key": "etihad.en-ae.nearby-airports",
+      "app": "etihad",
+      "page": "en-ae",
+      "target": "Nearby airports",
+      "locator": {
+        "strategy": "text",
+        "value": "Nearby airports",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T09:46:00.613Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-in.flying-from": {
+      "key": "etihad.en-in.flying-from",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying from",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying from",
+        "role": "combobox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T12:33:05.116Z",
+      "lastUsedAt": "2026-11-09T13:04:40.354Z",
+      "reuseCount": 35,
+      "missCount": 5,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-in.flying-to": {
+      "key": "etihad.en-in.flying-to",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying to",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying to",
+        "role": "combobox",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:33:22.425Z",
+      "lastUsedAt": "2026-11-09T13:02:36.189Z",
+      "reuseCount": 31,
+      "missCount": 3,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.economy": {
+      "key": "etihad.en-in.economy",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Economy",
+      "locator": {
+        "strategy": "role",
+        "value": "Economy",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:49:45.804Z",
+      "lastUsedAt": "2026-11-09T12:49:46.022Z",
+      "reuseCount": 1,
+      "missCount": 7,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.redacted": {
+      "key": "etihad.en-in.redacted",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "[REDACTED]",
+      "locator": {
+        "strategy": "role",
+        "value": "Cookie Settings",
+        "role": "button",
+        "exact": true,
+        "scope": "dialog \"Privacy\""
+      },
+      "verifiedAt": "2026-11-09T12:34:42.038Z",
+      "lastUsedAt": "2026-11-09T12:36:14.652Z",
+      "reuseCount": 3,
+      "missCount": 5,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-in.decrease-adults": {
+      "key": "etihad.en-in.decrease-adults",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Decrease adults",
+      "locator": {
+        "strategy": "text",
+        "value": "Decrease adults",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:37:30.592Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-in.increase-infants": {
+      "key": "etihad.en-in.increase-infants",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Increase infants",
+      "locator": {
+        "strategy": "role",
+        "value": "+",
+        "role": "tab",
+        "exact": true,
+        "scope": "Infants"
+      },
+      "verifiedAt": "2026-11-09T12:56:31.886Z",
+      "reuseCount": 0,
+      "missCount": 4,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "needs_revalidation",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.increase-adults": {
+      "key": "etihad.en-in.increase-adults",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Increase adults",
+      "locator": {
+        "strategy": "role",
+        "value": "+",
+        "role": "tab",
+        "exact": true,
+        "scope": "Adults"
+      },
+      "verifiedAt": "2026-11-09T13:02:49.010Z",
+      "lastUsedAt": "2026-11-09T13:03:40.571Z",
+      "reuseCount": 14,
+      "missCount": 7,
+      "repairCount": 0,
+      "failureCount": 2,
+      "status": "needs_revalidation",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.guests-cabin": {
+      "key": "etihad.en-in.guests-cabin",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Guests & Cabin",
+      "locator": {
+        "strategy": "text",
+        "value": "Guests and Cabin",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:01:12.136Z",
+      "reuseCount": 0,
+      "missCount": 7,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.increase-infant-with-seat": {
+      "key": "etihad.en-in.increase-infant-with-seat",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Increase Infant With Seat",
+      "locator": {
+        "strategy": "text",
+        "value": "Increase Infant With Seat",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:45:00.629Z",
+      "reuseCount": 0,
+      "missCount": 2,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-in.sensitive-76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0": {
+      "key": "etihad.en-in.sensitive-76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "sensitive-76f68a75f01ed76f5a02ada71a3765a38ef2c45ba99106ee5a4bd5678d7bbdd0",
+      "locator": {
+        "strategy": "role",
+        "value": "Business",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:51:13.468Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f": {
+      "key": "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f",
+      "locator": {
+        "strategy": "role",
+        "value": "First",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T12:52:20.778Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.flying-from-click": {
+      "key": "etihad.en-in.flying-from-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying from::click",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying from",
+        "role": "combobox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T13:23:42.021Z",
+      "lastUsedAt": "2026-11-09T13:37:34.430Z",
+      "reuseCount": 9,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 1,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-in.flying-from-fill": {
+      "key": "etihad.en-in.flying-from-fill",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying from::fill",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying from",
+        "role": "combobox",
+        "exact": true,
+        "scope": "tabpanel"
+      },
+      "verifiedAt": "2026-11-09T13:23:48.794Z",
+      "lastUsedAt": "2026-11-09T13:37:36.790Z",
+      "reuseCount": 9,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Semantic locator uniquely matched the current accessibility snapshot"
+    },
+    "etihad.en-in.flying-to-click": {
+      "key": "etihad.en-in.flying-to-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying to::click",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying to",
+        "role": "combobox",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:24:20.226Z",
+      "lastUsedAt": "2026-11-09T13:37:42.162Z",
+      "reuseCount": 7,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.flying-to-fill": {
+      "key": "etihad.en-in.flying-to-fill",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Flying to::fill",
+      "locator": {
+        "strategy": "role",
+        "value": "Flying to",
+        "role": "combobox",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:24:27.929Z",
+      "lastUsedAt": "2026-11-09T13:37:46.751Z",
+      "reuseCount": 7,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.economy-assertenabled": {
+      "key": "etihad.en-in.economy-assertenabled",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Economy::assertEnabled",
+      "locator": {
+        "strategy": "role",
+        "value": "Economy",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:24:41.273Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.economy-assertselected": {
+      "key": "etihad.en-in.economy-assertselected",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Economy::assertSelected",
+      "locator": {
+        "strategy": "role",
+        "value": "Economy",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:24:41.823Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f-click": {
+      "key": "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f::click",
+      "locator": {
+        "strategy": "role",
+        "value": "First",
+        "role": "tab",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:26:34.832Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f-assertselected": {
+      "key": "etihad.en-in.sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f-assertselected",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "sensitive-a151ceb1711aad529a7704248f03333990022ebbfa07a7f04c004d70c167919f::assertSelected",
+      "locator": {
+        "strategy": "role",
+        "value": "First",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:26:37.884Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.economy-assertunselected": {
+      "key": "etihad.en-in.economy-assertunselected",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Economy::assertUnselected",
+      "locator": {
+        "strategy": "role",
+        "value": "Economy",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:26:38.256Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.business": {
+      "key": "etihad.en-in.business",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Business",
+      "locator": {
+        "strategy": "text",
+        "value": "Business",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:26:38.592Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-in.business-assertunselected": {
+      "key": "etihad.en-in.business-assertunselected",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Business::assertUnselected",
+      "locator": {
+        "strategy": "role",
+        "value": "Business",
+        "role": "radio",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:26:38.611Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.increase-infants-click": {
+      "key": "etihad.en-in.increase-infants-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Increase infants::click",
+      "locator": {
+        "strategy": "role",
+        "value": "+",
+        "role": "tab",
+        "exact": true,
+        "scope": "Infants"
+      },
+      "verifiedAt": "2026-11-09T13:30:01.427Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.increase-adults-click": {
+      "key": "etihad.en-in.increase-adults-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Increase adults::click",
+      "locator": {
+        "strategy": "role",
+        "value": "+",
+        "role": "tab",
+        "exact": true,
+        "scope": "Adults"
+      },
+      "verifiedAt": "2026-11-09T13:31:29.284Z",
+      "lastUsedAt": "2026-11-09T13:35:42.346Z",
+      "reuseCount": 15,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.guests-cabin-click": {
+      "key": "etihad.en-in.guests-cabin-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Guests & Cabin::click",
+      "locator": {
+        "strategy": "text",
+        "value": "Guests and Cabin",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:37:50.148Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 2,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    },
+    "etihad.en-in.search": {
+      "key": "etihad.en-in.search",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Search",
+      "locator": {
+        "strategy": "text",
+        "value": "Search",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:35:45.316Z",
+      "reuseCount": 0,
+      "missCount": 1,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "unresolved"
+    },
+    "etihad.en-in.search-click": {
+      "key": "etihad.en-in.search-click",
+      "app": "etihad",
+      "page": "en-in",
+      "target": "Search::click",
+      "locator": {
+        "strategy": "role",
+        "value": "Search",
+        "role": "button",
+        "exact": true
+      },
+      "verifiedAt": "2026-11-09T13:35:45.331Z",
+      "reuseCount": 0,
+      "missCount": 0,
+      "repairCount": 0,
+      "failureCount": 0,
+      "status": "verified",
+      "evidence": "Deterministic accessible name uniquely matched the fresh page snapshot"
+    }
+  }
+}

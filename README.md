@@ -1,6 +1,6 @@
 # Business UAT Agent
 
-AI-powered Business Validation & UAT Agent that transforms Jira Sprint Stories into structured UAT Test Plans, enables Human-in-the-Loop Review & Approval, and prepares approved plans for future Playwright automation execution.
+AI-powered Business Validation & UAT Agent that transforms Jira Sprint Stories into structured UAT Test Plans, enables Human-in-the-Loop Review & Approval, and executes approved plans through the Playwright Test MCP server.
 
 ---
 
@@ -17,7 +17,7 @@ The platform:
 - Supports Human Review & Feedback
 - Produces Approved Test Plans
 - Learns Approved Business Knowledge
-- Prepares Approved Plans for Playwright Automation
+- Executes Approved Plans through Playwright Test MCP
 
 ---
 
@@ -44,7 +44,7 @@ Sprint Approval
      ↓
 Approved Sprint Plan
      ↓
-Future Playwright Automation
+Playwright Test MCP Execution
 ```
 
 ---
@@ -146,7 +146,7 @@ Knowledge Extraction
 
 packages/playwright
     ↓
-Future Automation Execution
+Playwright Test MCP Execution
 ```
 
 ---
@@ -221,7 +221,108 @@ output
 ## Automation
 
 - Playwright
+- Playwright Test MCP (`test_run`)
 - GitHub Actions
+
+### Run a Sprint-Plan Test Case
+
+From any terminal, run one case from the real `output/sprint-plan.json` through
+typed planning, headed Playwright MCP execution, generated-test creation, and a
+fresh Playwright replay:
+
+```bash
+npx tsx packages/orchestration/src/cli.ts --case TC-AIT-6-013
+```
+
+Run every case in a story sequentially:
+
+```bash
+npx tsx packages/orchestration/src/cli.ts --story AIT-6
+```
+
+Use `--plan <path>` to select a different sprint-plan JSON file. The reader
+normalizes the repository's existing `sprintId`/`stories[].storyId`/
+`testCases[].id` shape; it does not rewrite the source plan. The CLI and
+orchestrator do not gate execution on `reviewStatus`.
+
+Generated specs are written only under
+`packages/playwright/tests/generated/<storyId>/<testCaseId>.spec.ts`. Run a
+generated test directly with Playwright Test:
+
+```bash
+npx playwright test generated/AIT-6/TC-AIT-6-013.spec.ts --project=chromium
+```
+
+Generated test paths are relative to the configured Playwright `testDir`
+(`packages/playwright/tests`).
+
+The MCP browser is headed and isolated per case. Replay uses a fresh Playwright
+browser context with the project's `playwright.config.ts` settings. Reusable
+page objects and flows live under `packages/playwright/pages/`.
+The shared Chromium profile is defined in
+`packages/playwright/config/browserProfile.ts` and is used by both the
+Playwright Test runner and the per-execution MCP config. This keeps the browser
+arguments, desktop device defaults, viewport/screen, user agent, locale,
+timezone, permissions, geolocation, HTTPS handling, and color scheme aligned.
+
+On a worker machine without the MCP Chromium binary, install it once with:
+
+```bash
+npx -y @playwright/mcp@latest install-browser chromium
+```
+
+### API Execution Queue
+
+Start the API with `npx tsx apps/api/src/server.ts`. Submit either a case or a
+story; the queue returns a job ID immediately:
+
+```http
+POST http://localhost:4000/api/executions
+Content-Type: application/json
+
+{"testCaseId":"TC-AIT-6-013"}
+```
+
+or
+
+```json
+{"storyId":"AIT-6"}
+```
+
+Poll `GET /api/executions/<executionId>` for the per-job result. Set
+`EXECUTION_QUEUE_CONCURRENCY` (default `1`) to configure concurrent jobs; cases
+inside a story always run sequentially. Every job starts its own MCP browser and
+replay process. `MAX_HEAL_ATTEMPTS` (default `2`) bounds semantic-locator repair
+attempts. Repairs can update locators only; approved assertions are never
+removed or changed.
+
+In the web dashboard, clicking **Execute Tests** on an approved story creates
+the same queued job and opens `/executions/<executionId>`. The execution screen
+polls the job for live case/step progress, observations, evidence, and the final
+summary. Progress is also available from the job response; screenshots can be
+retrieved through `GET /api/executions/<executionId>/artifacts/<artifactName>`.
+Test-data values are redacted from persisted progress.
+
+The generated spec reads test data from `UAT_TESTDATA_<NAME>` environment
+variables (camelCase names become uppercase snake case, for example
+`originCity` becomes `UAT_TESTDATA_ORIGIN_CITY`). The orchestrator supplies the
+approved plan's values to its replay process without writing them into generated
+source or execution logs. Set these variables yourself when running a generated
+spec independently.
+
+### Execution Artifacts
+
+Each case run is stored in
+`output/automation/executions/<executionId>/`: `result.json`, `history.jsonl`,
+`action-plan.json`, `steps.json`, `metrics.json`, the isolated MCP config and
+browser output, and any exploration/replay screenshots, videos, error context,
+or traces. Story runs have their own summary/history/metrics directory and
+include each child case's artifact paths. The persistent semantic locator
+registry is `output/automation/locator-registry/etihad.json`.
+
+Application assertion failures are reported as failed executions. Plan,
+locator, browser, and replay-runner failures are reported as blocked automation
+failures.
 
 ---
 
@@ -351,9 +452,9 @@ Implemented:
 
 Upcoming:
 
-⬜ Playwright Automation Generation
+⬜ Human review of generated tests
 
-⬜ Automated Test Execution
+⬜ CI/CD replay integration
 
 ⬜ Result Analysis
 
@@ -385,9 +486,9 @@ Phase 2
 
 Phase 3
 
-⬜ Playwright Script Generation
+✅ Playwright Script Generation
 
-⬜ Automated UAT Execution
+✅ CLI/API Automated UAT Execution
 
 ---
 

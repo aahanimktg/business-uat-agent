@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   generatePlan,
   getPlans,
@@ -12,12 +13,14 @@ import {
   getTextExportUrl,
   getExcelExportUrl,
   getCreatedJiras,
+  executeApprovedTests,
 } from "@/lib/api";
 
 import StatCard from "@/components/StatCard";
 import ReviewModal from "@/components/ReviewModal";
 
 export default function HomePage() {
+  const router = useRouter();
   const [sprintId, setSprintId] = useState("37");
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState<any[]>([]);
@@ -236,6 +239,16 @@ export default function HomePage() {
   function handlePlanApproved() {
     setReviewPlan(null);
     loadPlans();
+  }
+
+  async function handleExecuteTests(storyId: string) {
+    try {
+      const job = await executeApprovedTests(storyId);
+      router.push(`/executions/${job.executionId}`);
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message ?? "Could not start test execution");
+    }
   }
 
 
@@ -467,10 +480,8 @@ export default function HomePage() {
                                 </a>
                                 <button
                                   type="button"
-                                  onClick={() =>
-                                    alert("Test execution automation is coming soon.")
-                                  }
-                                  className="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                                  onClick={() => handleExecuteTests(plan.storyId)}
+                                  className="bg-purple-100 hover:bg-purple-200 disabled:opacity-60 text-purple-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
                                 >
                                   Execute Tests
                                 </button>

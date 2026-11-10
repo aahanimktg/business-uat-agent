@@ -4,7 +4,7 @@ import { JiraSprintService } from "./JiraSprintService";
 import { JiraStoryService } from "./JiraStoryService";
 import { StoryMapper } from "./JiraStoryMapper";
 import { PlannerService } from "../../ai/services/planner.service";
-import { Requirement } from "../../ai/schemas/requirement.schema";
+import { Requirement } from "../../domain/schemas/requirement.schema";
 import { AIProvider } from "../../ai/providers/AIProvider";
 import { StructuredResponseService } from "../../ai/services/structured-response.service";
 dotenv.config();

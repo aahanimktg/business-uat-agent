@@ -1,4 +1,4 @@
-import { AcceptanceCriteria } from "@ai/schemas/requirement.schema";
+import { AcceptanceCriteria } from "@domain/schemas/requirement.schema";
 import { JiraADFParser } from "../jira/JiraADFParser";
 
 export interface Story {

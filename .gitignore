@@ -6,7 +6,7 @@ playwright-report/
 test-results/
 blob-report/
 
-# Environment / Secrets
+# Environment / secrets
 .env
 .env.*
 !.env.example
@@ -19,21 +19,23 @@ blob-report/
 Thumbs.db
 
 # IDE
-.vscode/
+.vscode/settings.json
 .idea/
 
 # Build
 dist/
 coverage/
+*.tsbuildinfo
 
-# Next
+# Next.js
 .next/
 out/
 
-# VS Code
-.vscode/settings.json
-
-# Runtime Generated Files
-output/*.json
+# Runtime-generated files
+.playwright-mcp/
+output/automation/jobs/
+output/automation/executions/
+output/automation/mcp/
+output/automation/inspection-home.png
 output/reviews/*
 output/context/*

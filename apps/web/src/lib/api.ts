@@ -1,4 +1,66 @@
-const API_BASE_URL = "http://localhost:4000";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+
+export type ExecutionStatus =
+  | "queued"
+  | "planning"
+  | "executing"
+  | "passed"
+  | "failed"
+  | "blocked";
+
+export type ExecutionCaseResult = {
+  testCaseId: string;
+  title?: string;
+  expectedResult?: string;
+  status: ExecutionStatus | "planning" | "executing";
+  error?: string;
+  startedAt?: string;
+  finishedAt?: string;
+  currentStep?: number;
+  totalSteps?: number;
+  activeStepId?: string;
+  plannedSteps?: string[];
+  actualResult?: string;
+  failureType?: "application" | "automation";
+  testData?: Array<{ name: string; value: string }>;
+  evidence?: Record<string, string>;
+  aiAnalysis?: string;
+  steps?: Array<{ stepId: string; sourceStep: string; status: string; detail?: string }>;
+};
+
+export type ExecutionObservation = {
+  timestamp: string;
+  text: string;
+  status: "passed" | "failed" | "blocked" | "running";
+};
+
+export type StoryExecutionResult = {
+  status: ExecutionStatus;
+  totals?: { total: number; passed: number; failed: number; blocked: number };
+  results?: ExecutionCaseResult[];
+  artifacts?: Record<string, string>;
+};
+
+export type ExecutionJob = {
+  executionId: string;
+  storyId?: string;
+  testCaseId?: string;
+  status: ExecutionStatus;
+  createdAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  progress?: {
+    storyTitle: string;
+    totalCases: number;
+    completedCases: number;
+    cases: ExecutionCaseResult[];
+    currentCase?: ExecutionCaseResult;
+    observation: ExecutionObservation[];
+  };
+  result?: StoryExecutionResult;
+  error?: string;
+};
 
 export async function generatePlan(sprintId: number) {
   console.log("Calling API...");
@@ -96,6 +158,30 @@ export function getTextExportUrl(storyId: string) {
 
 export function getExcelExportUrl(storyId: string) {
   return `${API_BASE_URL}/plans/${storyId}/excel`;
+}
+
+export async function executeApprovedTests(storyId: string) {
+  const response = await fetch(`${API_BASE_URL}/api/executions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ storyId }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error ?? "Could not start automation execution");
+  }
+  return data as ExecutionJob;
+}
+
+export async function getExecutionStatus(executionId: string) {
+  const response = await fetch(
+    `${API_BASE_URL}/api/executions/${encodeURIComponent(executionId)}`,
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error ?? "Could not retrieve execution status");
+  }
+  return data as ExecutionJob;
 }
 
 export async function reviewTestCases(

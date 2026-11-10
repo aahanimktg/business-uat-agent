@@ -1,0 +1,1235 @@
+{
+  "sprintId": 70,
+  "status": "in-review",
+  "stories": [
+    {
+      "storyId": "AIT-8",
+      "title": "Passenger Management & Cabin Selection",
+      "version": 2,
+      "coverage": {
+        "coverageSummary": "Covers passenger category count management, dynamic summary updates, cabin default and single-select behavior, and proactive UI enforcement for adult minimum, infant-to-adult ratio, and max occupied seats=9. Includes positive, negative, and boundary scenarios with derived risk checks for infant-with-seat seat-occupancy inclusion, verifying control disablement/prevention (no inline/toast/modal errors).",
+        "coveragePercentage": 96,
+        "coverageReason": "All acceptance criteria are covered with positive, negative, and boundary cases, and clarifications confirm proactive UI restrictions (disabled steppers) with default counts (Adult=1, others=0) and no error messages to assert. Remaining minor uncertainty is limited to exact UI selectors/labels for controls and summary formatting.",
+        "coveredAreas": [
+          "Passenger categories: Adult, Child, Infant, Infant With Seat",
+          "Increase/decrease passenger counts",
+          "Passenger summary dynamic update",
+          "Cabin selection: Economy default; single cabin selected at a time; Economy/Business/First options",
+          "Validation before search execution",
+          "Blocking conditions enforced proactively in UI: Adult cannot be 0; Infant cannot exceed Adult; Occupied seats cannot exceed 9",
+          "Occupied seats definition includes Adult, Child, Infant With Seat",
+          "Boundary at total occupied seats = 9 allowed",
+          "Default passenger counts: Adult=1, others=0"
+        ],
+        "missingAreas": [
+          "Stable identifiers/selectors for disabled state of passenger steppers and for passenger summary formatting/location",
+          "Whether 'Infant With Seat' has any additional constraints beyond counting as occupied seat"
+        ]
+      },
+      "automationReadiness": {
+        "score": 93,
+        "reason": "Clarifications confirm proactive UI enforcement with disabled controls and no error messages, making automation more deterministic. Minor risk remains in reliably locating the steppers, their disabled state, and the passenger summary across responsive layouts."
+      },
+      "testCases": [
+        {
+          "id": "TC-AIT-8-001",
+          "title": "Verify Economy is selected by default in Passengers & Cabin",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Ensure default cabin selection is Economy when opening passenger and cabin configuration.",
+          "reviewStatus": "pending",
+          "confidence": 90,
+          "confidenceReason": "Requirement explicitly states Economy must be selected by default; UI label/selector specifics may vary.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Passengers & Cabin control",
+            "Verify selected option Cabin equals Economy"
+          ],
+          "expectedOutcome": "Economy cabin is pre-selected by default when the configuration panel opens.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Cabin selection state can be asserted via DOM attributes/text using Playwright."
+        },
+        {
+          "id": "TC-AIT-8-002",
+          "title": "Verify only one cabin class can be selected at a time",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Ensure selecting a cabin class deselects the previously selected cabin class.",
+          "reviewStatus": "pending",
+          "confidence": 88,
+          "confidenceReason": "Single-select rule is explicit; exact UI implementation (radio vs buttons) may differ but still verifiable.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Passengers & Cabin control",
+            "Click Business cabin option",
+            "Verify selected option Cabin equals Business",
+            "Click First cabin option",
+            "Verify selected option Cabin equals First"
+          ],
+          "expectedOutcome": "At any time, exactly one cabin class is selected; selecting Business then First results in First selected and Business not selected.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Radio/button state can be validated via selected attributes/classes/text."
+        },
+        {
+          "id": "TC-AIT-8-003",
+          "title": "Increase Adult count and verify passenger summary updates dynamically",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Validate passenger count adjustments update the visible summary immediately.",
+          "reviewStatus": "pending",
+          "confidence": 82,
+          "confidenceReason": "Dynamic update is stated, but summary format/location is not specified; may require selector tuning.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Passengers & Cabin control",
+            "Increase count Adult passengers by 1",
+            "Verify value Passenger summary contains Adult 2",
+            "Click Continue"
+          ],
+          "expectedOutcome": "Adult count increments by 1 and passenger summary reflects the new Adult total immediately; configuration can be saved via Continue.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Stepper interaction and summary text/value assertion are automatable."
+        },
+        {
+          "id": "TC-AIT-8-004",
+          "title": "Decrease Adult count to zero and verify Search is blocked",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Ensure minimum one Adult validation is enforced before flight search execution.",
+          "reviewStatus": "pending",
+          "confidence": 84,
+          "confidenceReason": "Clarification confirms UI prevents Adult=0 by disabling decrement control; test can reliably assert prevention rather than message-based blocking.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            },
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Passengers & Cabin control",
+            "Verify value Adult passenger count equals 1",
+            "Verify Adult decrement control is disabled (cannot reduce below 1)",
+            "Attempt to decrease count Adult passengers by 1",
+            "Verify value Adult passenger count equals 1",
+            "Click Continue",
+            "Click Search"
+          ],
+          "expectedOutcome": "Adult count cannot be reduced below 1 (decrement is disabled/prevented); configuration remains valid and no passenger-validation error message is shown for Adult minimum rule.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Disabled state (or no-op click) can be asserted via DOM properties/attributes and count remaining unchanged; no dependency on error message rendering."
+        },
+        {
+          "id": "TC-AIT-8-005",
+          "title": "Set Infant count greater than Adult count and verify Search is blocked",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Enforce rule: Infant count must not exceed Adult count; one Adult can accompany only one Infant.",
+          "reviewStatus": "pending",
+          "confidence": 86,
+          "confidenceReason": "Clarification confirms UI prevents invalid configurations proactively; test can assert Infant increment is disabled/prevented beyond Adult count.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            },
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Passengers & Cabin control",
+            "Verify value Adult passenger count equals 1",
+            "Increase count Infant passengers by 1",
+            "Verify value Infant passenger count equals 1",
+            "Verify Infant increment control is disabled (cannot exceed Adult count)",
+            "Attempt to increase count Infant passengers by 1",
+            "Verify value Infant passenger count equals 1",
+            "Click Continue",
+            "Click Search"
+          ],
+          "expectedOutcome": "Infant count cannot be increased beyond Adult count (increment is disabled/prevented); no passenger-validation error message is shown for the Infant-to-Adult rule.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Disabled state/no-op click and count assertions are deterministic; does not require asserting any error copy/location."
+        },
+        {
+          "id": "TC-AIT-8-006",
+          "title": "Boundary: Occupied seats equals 9 should allow Search (Adults + Children + Infants With Seat)",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "boundary",
+          "priority": "high",
+          "objective": "Validate maximum occupied seats rule at the allowed boundary of 9 seats.",
+          "reviewStatus": "pending",
+          "confidence": 82,
+          "confidenceReason": "Clarification confirms UI prevents exceeding limits; boundary of 9 can be asserted via counts and enabled controls (or not-disabled increment until reaching 9).",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            },
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Passengers & Cabin control",
+            "Increase count Adult passengers by 8",
+            "Verify value Adult passenger count equals 9",
+            "Verify value Occupied seats equals 9",
+            "Click Continue",
+            "Click Search"
+          ],
+          "expectedOutcome": "Passenger picker allows configuration with total occupied seats of 9; passenger validation does not block search due to seat limit at this boundary.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Counts are automatable; whether search proceeds may still depend on other required inputs outside passenger scope, but test can at least confirm passenger picker does not prevent saving/continuing at 9."
+        },
+        {
+          "id": "TC-AIT-8-007",
+          "title": "Negative: Occupied seats exceeds 9 should block Search",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Ensure search cannot proceed when occupied seats (Adults + Children + Infants With Seat) exceed 9.",
+          "reviewStatus": "pending",
+          "confidence": 87,
+          "confidenceReason": "Clarification confirms UI prevents setting pax count above the limit by disabling increment controls; test can assert prevention rather than error messaging on Search.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            },
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Passengers & Cabin control",
+            "Increase count Adult passengers by 8",
+            "Verify value Adult passenger count equals 9",
+            "Verify Child increment control is disabled (cannot exceed total occupied seats limit of 9)",
+            "Attempt to increase count Child passengers by 1",
+            "Verify value Child passenger count equals 0",
+            "Click Continue",
+            "Click Search"
+          ],
+          "expectedOutcome": "When occupied seats already equals 9, additional occupied-seat passenger increments (e.g., Child) are disabled/prevented; total occupied seats cannot exceed 9 and no passenger-validation error message is displayed for this rule.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Disabled state/no-op click and unchanged counts can be asserted reliably; no need to depend on search navigation or error messages."
+        },
+        {
+          "id": "TC-AIT-8-008",
+          "title": "Derived: Infant With Seat counts toward occupied seats and can trigger >9 block",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": true,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Mitigate risk that Infant With Seat is mistakenly excluded from seat-occupancy validation.",
+          "reviewStatus": "pending",
+          "confidence": 85,
+          "confidenceReason": "Clarification confirms limits are enforced in UI; test can validate that adding Infant With Seat is also prevented at the seat cap, proving it is counted as an occupied seat.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            },
+            {
+              "name": "origin",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destination",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Passengers & Cabin control",
+            "Increase count Adult passengers by 8",
+            "Verify value Adult passenger count equals 9",
+            "Verify Infant With Seat increment control is disabled (cannot exceed total occupied seats limit of 9)",
+            "Attempt to increase count Infant With Seat passengers by 1",
+            "Verify value Infant With Seat passenger count equals 0",
+            "Click Continue",
+            "Click Search"
+          ],
+          "expectedOutcome": "When occupied seats already equals 9, Infant With Seat cannot be incremented (disabled/prevented), confirming Infant With Seat is counted as an occupied seat; no passenger-validation error message is displayed for this rule.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Disabled state/no-op click and unchanged counts can be asserted; avoids dependence on any error message or search navigation."
+        },
+        {
+          "id": "TC-AIT-8-009",
+          "title": "Verify switching cabin updates passenger summary (if cabin is included in summary)",
+          "acceptanceCriteriaIds": [
+            "AC2"
+          ],
+          "derivedScenario": true,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Ensure cabin preference change is reflected in the visible selection/summary used for search criteria.",
+          "reviewStatus": "pending",
+          "confidence": 74,
+          "confidenceReason": "Cabin selection is required, but whether summary includes cabin is not specified; test validates visible selection state at minimum.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Passengers & Cabin control",
+            "Click Business cabin option",
+            "Verify selected option Cabin equals Business",
+            "Click Done",
+            "Verify value Passengers & Cabin control contains Business"
+          ],
+          "expectedOutcome": "Cabin selection persists after closing the panel and is visible on the Passengers & Cabin control (or equivalent summary indicator).",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "May be fully automatable if the control displays cabin; if not displayed, only internal state is verifiable within the panel."
+        },
+        {
+          "id": "TC-AIT-8-010",
+          "title": "Verify passenger counts can be decreased and summary updates (non-zero adult maintained)",
+          "acceptanceCriteriaIds": [
+            "AC1",
+            "AC2"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Validate decrease functionality and dynamic summary update while keeping at least 1 Adult.",
+          "reviewStatus": "pending",
+          "confidence": 83,
+          "confidenceReason": "Decrease and dynamic summary are explicit; exact min behavior for Adult decrement is unspecified, so this keeps Adult >= 1.",
+          "test_data": [
+            {
+              "name": "baseUrl",
+              "value": "https://<env>/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://<env>/",
+            "Wait for page load",
+            "Click Passengers & Cabin control",
+            "Increase count Adult passengers by 1",
+            "Verify value Adult passenger count equals 2",
+            "Decrease count Adult passengers by 1",
+            "Verify value Adult passenger count equals 1",
+            "Verify value Passenger summary contains Adult 1",
+            "Click Continue"
+          ],
+          "expectedOutcome": "Adult count can be increased and decreased; passenger summary updates immediately and reflects the final count of 1 Adult.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Stepper changes and summary updates can be asserted through UI text/state."
+        }
+      ],
+      "clarifications": [],
+      "status": "approved",
+      "coverageSummary": "Covers passenger category count management, dynamic summary updates, cabin default and single-select behavior, and proactive UI enforcement for adult minimum, infant-to-adult ratio, and max occupied seats=9. Includes positive, negative, and boundary scenarios with derived risk checks for infant-with-seat seat-occupancy inclusion, verifying control disablement/prevention (no inline/toast/modal errors).",
+      "generatedOn": "2026-11-06T09:12:19.987Z",
+      "jiraUpdatedAt": "2026-11-03T13:56:25.738+0530"
+    },
+    {
+      "storyId": "AIT-6",
+      "title": "Flight Search & Journey Planning",
+      "version": 2,
+      "coverage": {
+        "coverageSummary": "Covers default journey type, journey type switching (Round Trip/One-Way/Multi-City), mandatory field validations via Origin/Destination popup behavior (no inline validation messages), origin-destination difference rule, airport search by code/name/city with dynamic suggestions, popular destinations display when empty, nearby airport recommendations visibility (geo-location based), value retention, and a basic responsive check across viewports. Gaps remain around definitive 'active airport' dataset enforcement due to no provided inactive airport fixture and accessibility standards verification due to being out of scope/ignored.",
+        "coveragePercentage": 88,
+        "coverageReason": "Homepage URL for widget is now defined and validation behavior is clarified as popup-based without inline messages, improving reliability of automation assertions. Coverage remains reduced because 'only active airports' cannot be validated without a known inactive airport fixture, and accessibility requirements are explicitly ignored.",
+        "coveredAreas": [
+          "Round Trip default selection",
+          "Journey type support: Round Trip, One-Way, Multi-City",
+          "Origin mandatory validation (popup-based, no inline error message)",
+          "Destination mandatory validation (popup-based, no inline error message)",
+          "Origin and Destination must not be identical (popup-based, no inline error message)",
+          "Airport search supports Airport Code",
+          "Airport search supports Airport Name",
+          "Airport search supports City Name",
+          "Dynamic airport suggestions while typing",
+          "Popular destinations shown when no criteria entered",
+          "Nearby airport recommendations appear (geo-location based)",
+          "Widget retains selected values until modified",
+          "Basic responsive behavior across desktop/tablet/mobile viewports"
+        ],
+        "missingAreas": [
+          "Verification that only active airports are selectable (requires known inactive airport in test data or backend fixture)",
+          "Accessibility standards verification beyond basic UI presence (explicitly ignored / not in scope per feedback)"
+        ]
+      },
+      "automationReadiness": {
+        "score": 86,
+        "reason": "Homepage URL is now defined, enabling stable entry-point automation. Most scenarios are UI-driven and Playwright-automatable (field selection, suggestions, popup validations, journey type switching, responsive viewports). Readiness remains reduced due to dependency on geo-location for nearby airports (hard to deterministically control) and lack of a known inactive airport fixture to validate 'only active airports'."
+      },
+      "testCases": [
+        {
+          "id": "TC-AIT-6-001",
+          "title": "Default journey type is Round Trip on Flight Search widget",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Confirm the widget defaults to Round Trip to align with expected primary journey planning flow.",
+          "reviewStatus": "approved",
+          "confidence": 90,
+          "confidenceReason": "Explicitly stated requirement; UI verifiable by checking selected journey type control.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Verify selected option Journey type equals Round Trip"
+          ],
+          "expectedOutcome": "Flight Search widget shows Round Trip selected by default.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Selection state can be asserted via UI attributes/text using Playwright."
+        },
+        {
+          "id": "TC-AIT-6-002",
+          "title": "Switch journey type to One-Way",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Ensure One-Way journey type is available and selectable.",
+          "reviewStatus": "pending",
+          "confidence": 88,
+          "confidenceReason": "Requirement states support; exact UI layout unknown but selection is testable.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Select option Journey type = One-Way",
+            "Verify selected option Journey type equals One-Way"
+          ],
+          "expectedOutcome": "One-Way journey type can be selected and is shown as active.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Option selection and state verification are UI-automatable."
+        },
+        {
+          "id": "TC-AIT-6-003",
+          "title": "Switch journey type to Multi-City",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Ensure Multi-City journey type is available and selectable.",
+          "reviewStatus": "pending",
+          "confidence": 86,
+          "confidenceReason": "Requirement states support; multi-city UI may vary but selection state is verifiable.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Select option Journey type = Multi-City",
+            "Verify selected option Journey type equals Multi-City"
+          ],
+          "expectedOutcome": "Multi-City journey type can be selected and is shown as active.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Option selection and state verification are UI-automatable."
+        },
+        {
+          "id": "TC-AIT-6-004",
+          "title": "Origin field is mandatory validation triggers on search",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Prevent searching without an Origin to ensure valid route definition.",
+          "reviewStatus": "pending",
+          "confidence": 84,
+          "confidenceReason": "Mandatory rule is explicit; exact message text unknown.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Search Flights button",
+            "Verify Origin/Destination validation popup is displayed indicating Origin is required"
+          ],
+          "expectedOutcome": "User cannot proceed; an Origin/Destination validation popup is displayed indicating Origin is required (no inline validation message).",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Search click and popup visibility/content can be asserted via UI."
+        },
+        {
+          "id": "TC-AIT-6-005",
+          "title": "Destination field is mandatory validation triggers on search",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Prevent searching without a Destination to ensure valid route definition.",
+          "reviewStatus": "pending",
+          "confidence": 84,
+          "confidenceReason": "Mandatory rule is explicit; exact message text unknown.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Search Flights button",
+            "Verify Origin/Destination validation popup is displayed indicating Destination is required"
+          ],
+          "expectedOutcome": "User cannot proceed; an Origin/Destination validation popup is displayed indicating Destination is required (no inline validation message).",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "All actions and the popup validation state are UI-verifiable."
+        },
+        {
+          "id": "TC-AIT-6-006",
+          "title": "Origin and Destination cannot be identical",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "negative",
+          "priority": "high",
+          "objective": "Enforce route validity by preventing same Origin and Destination selection.",
+          "reviewStatus": "pending",
+          "confidence": 82,
+          "confidenceReason": "Rule is explicit; UI behavior could be either blocking selection or showing an error.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "sameAirport",
+              "value": "Dubai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Dubai in Origin field",
+            "Wait for airport suggestions",
+            "Select Dubai from airport suggestions",
+            "Click Destination field",
+            "Enter Dubai in Destination field",
+            "Wait for airport suggestions",
+            "Select Dubai from airport suggestions",
+            "Click Search Flights button",
+            "Verify Origin/Destination validation popup is displayed indicating Origin and Destination must be different"
+          ],
+          "expectedOutcome": "System blocks the search and displays an Origin/Destination validation popup indicating Origin and Destination must be different (no inline validation message).",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Selection and popup validation can be verified via UI."
+        },
+        {
+          "id": "TC-AIT-6-007",
+          "title": "Airport search supports selection by Airport Code",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Allow users to find airports using IATA/airport codes.",
+          "reviewStatus": "pending",
+          "confidence": 80,
+          "confidenceReason": "Requirement is explicit but exact codes available in environment are unknown.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCode",
+              "value": "AUH"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter AUH in Origin field",
+            "Wait for airport suggestions",
+            "Select AUH from airport suggestions",
+            "Verify value Origin field equals AUH"
+          ],
+          "expectedOutcome": "Airport suggestions include the airport code and selection populates the Origin field accordingly.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Typing, suggestion selection, and field value verification are automatable."
+        },
+        {
+          "id": "TC-AIT-6-008",
+          "title": "Airport search supports selection by Airport Name",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Allow users to find airports using airport name text.",
+          "reviewStatus": "pending",
+          "confidence": 80,
+          "confidenceReason": "Requirement is explicit; airport naming in suggestions may differ slightly by locale.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "destinationAirportName",
+              "value": "Chhatrapati Shivaji"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Destination field",
+            "Enter Chhatrapati Shivaji in Destination field",
+            "Wait for airport suggestions",
+            "Select Chhatrapati Shivaji from airport suggestions"
+          ],
+          "expectedOutcome": "Airport suggestions are returned for an airport name query and the selected airport populates Destination.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Suggestion list interactions are automatable if stable selectors exist."
+        },
+        {
+          "id": "TC-AIT-6-009",
+          "title": "Airport search supports selection by City Name",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Allow users to find airports by searching for a city.",
+          "reviewStatus": "pending",
+          "confidence": 82,
+          "confidenceReason": "Requirement is explicit; city-to-airport mapping is environment-dependent but commonly supported.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Verify value Origin field equals Abu Dhabi"
+          ],
+          "expectedOutcome": "Typing a city name returns airport suggestions and selection sets the field value.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Typing, suggestion selection, and value assertions are automatable."
+        },
+        {
+          "id": "TC-AIT-6-010",
+          "title": "Airport suggestions load dynamically while typing (incremental refinement)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "boundary",
+          "priority": "medium",
+          "objective": "Validate dynamic suggestions update as user refines input to reduce risk of stale results.",
+          "reviewStatus": "pending",
+          "confidence": 78,
+          "confidenceReason": "Dynamic loading is explicit, but measurable UI behavior (timing/result changes) can vary by debounce and data.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "partial1",
+              "value": "A"
+            },
+            {
+              "name": "partial2",
+              "value": "Abu"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter A in Origin field",
+            "Wait for airport suggestions",
+            "Enter Abu in Origin field",
+            "Wait for airport suggestions"
+          ],
+          "expectedOutcome": "Airport suggestions appear after each input and reflect the refined query (no empty/stuck suggestion state).",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Can verify suggestions are displayed after each input, but reliably asserting 'changed content' may be flaky without deterministic data/IDs."
+        },
+        {
+          "id": "TC-AIT-6-011",
+          "title": "Popular destinations displayed when no search criteria is entered",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Support discovery by showing popular destinations in an empty-search state.",
+          "reviewStatus": "pending",
+          "confidence": 83,
+          "confidenceReason": "Requirement is explicit; exact placement and labels may differ but presence is verifiable.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Destination field",
+            "Wait for airport suggestions",
+            "Verify message Popular destinations is displayed"
+          ],
+          "expectedOutcome": "Popular destinations section/list is displayed when no destination search text is entered.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "UI section visibility can be asserted via text/role selectors."
+        },
+        {
+          "id": "TC-AIT-6-012",
+          "title": "Nearby airports recommendations displayed (presence check)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Ensure nearby airport recommendation feature is surfaced to users.",
+          "reviewStatus": "pending",
+          "confidence": 76,
+          "confidenceReason": "Requirement states availability and configurability; without country/context triggers, only presence can be validated.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Wait for airport suggestions",
+            "Verify message Nearby airports is displayed"
+          ],
+          "expectedOutcome": "Nearby airports/recommendations section is displayed in the airport suggestion panel (when applicable, geo-location based).",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Presence is automatable, but deterministic geo-location control (and resulting content correctness) cannot be proven without test support."
+        },
+        {
+          "id": "TC-AIT-6-013",
+          "title": "Selected values are retained until user modifies them",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Prevent accidental loss of user input during journey planning.",
+          "reviewStatus": "pending",
+          "confidence": 81,
+          "confidenceReason": "Explicit requirement; retention across navigation/refresh is not specified, so validated within page session.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationCity",
+              "value": "Mumbai"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Origin field",
+            "Verify value Origin field equals Abu Dhabi",
+            "Click Destination field",
+            "Verify value Destination field equals Mumbai"
+          ],
+          "expectedOutcome": "Previously selected Origin and Destination remain populated until changed by the user.",
+          "automationFeasibility": "fully-automatable",
+          "automationReason": "Field values can be asserted after focus changes."
+        },
+        {
+          "id": "TC-AIT-6-014",
+          "title": "Round Trip search with valid Origin, Destination, and dates navigates to results",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Validate the primary journey search flow leads to flight results.",
+          "reviewStatus": "pending",
+          "confidence": 77,
+          "confidenceReason": "Search button exists, but result page URL/title and date requirements are not fully specified.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationCity",
+              "value": "Mumbai"
+            },
+            {
+              "name": "departDate",
+              "value": "2026-12-10"
+            },
+            {
+              "name": "returnDate",
+              "value": "2026-12-20"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Verify selected option Journey type equals Round Trip",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Departure date field",
+            "Select date 2026-12-10 from calendar",
+            "Click Return date field",
+            "Select date 2026-12-20 from calendar",
+            "Click Search Flights button",
+            "Verify page navigation to Flight results page"
+          ],
+          "expectedOutcome": "Search executes successfully and navigates to the flight results/availability page.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Navigation can be asserted, but stable result-page identifiers are not specified and may vary by environment."
+        },
+        {
+          "id": "TC-AIT-6-015",
+          "title": "One-Way search requires a single travel date and navigates to results",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "positive",
+          "priority": "high",
+          "objective": "Confirm One-Way journey planning works end-to-end with a single date.",
+          "reviewStatus": "pending",
+          "confidence": 75,
+          "confidenceReason": "One-way date UI behavior is not specified; assumed to be a single date picker.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationCity",
+              "value": "Mumbai"
+            },
+            {
+              "name": "departDate",
+              "value": "2026-12-10"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Select option Journey type = One-Way",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Departure date field",
+            "Select date 2026-12-10 from calendar",
+            "Click Search Flights button",
+            "Verify page navigation to Flight results page"
+          ],
+          "expectedOutcome": "One-Way search executes with a single date and navigates to results.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "UI flow likely automatable, but result page identifiers and one-way date widget behavior are not fully defined."
+        },
+        {
+          "id": "TC-AIT-6-016",
+          "title": "Multi-City journey shows ability to define multiple legs (UI capability check)",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "positive",
+          "priority": "medium",
+          "objective": "Validate that Multi-City mode exposes multiple segment inputs.",
+          "reviewStatus": "pending",
+          "confidence": 74,
+          "confidenceReason": "Requirement says Multi-City supported, but leg count rules and UI labels are unspecified.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Select option Journey type = Multi-City",
+            "Verify message Trip 1 is displayed",
+            "Verify message Trip 2 is displayed"
+          ],
+          "expectedOutcome": "Multi-City mode displays at least two trip/leg sections for user input.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if leg labels/roles are stable; wording may differ across implementations."
+        },
+        {
+          "id": "TC-AIT-6-017",
+          "title": "Guests & Cabin can be opened and saved via Continue",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "positive",
+          "priority": "low",
+          "objective": "Ensure passengers & cabin control is operable as part of the search widget inputs.",
+          "reviewStatus": "pending",
+          "confidence": 72,
+          "confidenceReason": "Widget includes Guests & Cabin but no business rules for counts/cabin options are provided.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Passengers & Cabin",
+            "Increase count Adults",
+            "Verify value Adults count equals 2",
+            "Click Continue",
+            "Verify value Passengers & Cabin summary equals 2 Adults"
+          ],
+          "expectedOutcome": "User can adjust passenger count, save via Continue, and see updated summary on the widget.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Automatable if passenger labels and summary text are stable; summary formatting may vary."
+        },
+        {
+          "id": "TC-AIT-6-018",
+          "title": "Promo Code field is optional and does not block search when empty",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": true,
+          "type": "positive",
+          "priority": "low",
+          "objective": "Confirm the optional promo code does not prevent searching when not provided.",
+          "reviewStatus": "pending",
+          "confidence": 70,
+          "confidenceReason": "Promo code is listed as optional but no explicit validation behavior is described.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            },
+            {
+              "name": "originCity",
+              "value": "Abu Dhabi"
+            },
+            {
+              "name": "destinationCity",
+              "value": "Mumbai"
+            },
+            {
+              "name": "departDate",
+              "value": "2026-12-10"
+            },
+            {
+              "name": "returnDate",
+              "value": "2026-12-20"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions",
+            "Click Destination field",
+            "Enter Mumbai in Destination field",
+            "Wait for airport suggestions",
+            "Select Mumbai from airport suggestions",
+            "Click Departure date field",
+            "Select date 2026-12-10 from calendar",
+            "Click Return date field",
+            "Select date 2026-12-20 from calendar",
+            "Click Search Flights button",
+            "Verify page navigation to Flight results page"
+          ],
+          "expectedOutcome": "Search completes successfully without requiring a promo code.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Similar to other end-to-end search cases; navigation check needs stable result identifiers."
+        },
+        {
+          "id": "TC-AIT-6-019",
+          "title": "Responsive behavior: Flight Search widget renders on mobile viewport",
+          "acceptanceCriteriaIds": [
+            "AC1"
+          ],
+          "derivedScenario": false,
+          "type": "boundary",
+          "priority": "medium",
+          "objective": "Validate the widget is usable on mobile screen sizes.",
+          "reviewStatus": "pending",
+          "confidence": 79,
+          "confidenceReason": "Responsiveness requirement is explicit; exact layout expectations not defined so validate presence and operability of core fields.",
+          "test_data": [
+            {
+              "name": "homeUrl",
+              "value": "https://test.etihad.com/en-in/"
+            }
+          ],
+          "preconditions": [],
+          "steps": [
+            "Open URL https://test.etihad.com/en-in/",
+            "Wait for page load",
+            "Verify message Flight Search is displayed",
+            "Click Origin field",
+            "Enter Abu Dhabi in Origin field",
+            "Wait for airport suggestions",
+            "Select Abu Dhabi from airport suggestions"
+          ],
+          "expectedOutcome": "On mobile viewport, the flight search widget is visible and core interactions (airport selection) function.",
+          "automationFeasibility": "partially-automatable",
+          "automationReason": "Requires controlling viewport in Playwright test runner; AI-agent execution may need explicit viewport capability."
+        }
+      ],
+      "clarifications": [],
+      "status": "approved",
+      "coverageSummary": "Covers default journey type, journey type switching (Round Trip/One-Way/Multi-City), mandatory field validations via Origin/Destination popup behavior (no inline validation messages), origin-destination difference rule, airport search by code/name/city with dynamic suggestions, popular destinations display when empty, nearby airport recommendations visibility (geo-location based), value retention, and a basic responsive check across viewports. Gaps remain around definitive 'active airport' dataset enforcement due to missing test hooks/data and accessibility standards verification due to being out of scope/ignored.",
+      "generatedOn": "2026-11-06T09:12:19.987Z",
+      "jiraUpdatedAt": "2026-11-03T13:56:26.449+0530"
+    }
+  ]
+}

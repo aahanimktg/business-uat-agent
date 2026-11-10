@@ -39,6 +39,8 @@ export const TestCaseReviewStatusSchema = z.enum([
   "rejected",
 ]);
 
+
+
 export const TestCaseSchema = z.object({
   id: z.string(),
   title: z.string().min(1),
@@ -99,6 +101,12 @@ export const TestPlanSchema = z.object({
   jiraUpdatedAt:z.string().optional()
 });
 
+export const StorySchema = z.object({
+  sprintId: z.string().trim().min(1),
+  status: z.string().trim().min(1),
+  stories: z.array(TestPlanSchema).min(1),
+}).passthrough();
+
 export const FeedbackHistorySchema =z.object({
     version:z.number(),
     answers:z.record(z.string(),z.string().optional()),
@@ -145,6 +153,7 @@ export const ApproveRequestSchema =z.object({
     currentPlan:TestPlanSchema
   });
 
+
 export type TestCase = z.infer<typeof TestCaseSchema>;
 
 export type TestPlan = z.infer<typeof TestPlanSchema>;
@@ -156,3 +165,5 @@ export type ReviewRequest = z.infer<typeof ReviewRequestSchema>;
 export type ReviewSession = z.infer<typeof ReviewSessionSchema>;
 
 export type BusinessContext = z.infer<typeof BusinessContextSchema>;
+
+

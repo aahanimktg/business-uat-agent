@@ -1,10 +1,10 @@
 import {
   TestCase
-} from '../schemas/test-plan.schema';
+} from '../../domain/schemas/test-plan.schema';
 
 import {
   TestExecutionResult
-} from '../schemas/execution-result.schema';
+} from '../../domain/schemas/execution-result.schema';
 
 export function buildResultAnalysisPrompt(
   testCase: TestCase,

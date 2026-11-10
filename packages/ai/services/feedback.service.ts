@@ -2,7 +2,7 @@
 
 import { buildFeedbackPrompt } from "@ai/prompts/feedback.prompt";
 import { AIProvider } from "@ai/providers/AIProvider";
-import { TestPlan, TestPlanSchema } from "@ai/schemas/test-plan.schema";
+import { TestPlan, TestPlanSchema } from "@domain/schemas/test-plan.schema";
 import { StructuredResponseService } from "./structured-response.service";
 
 export class FeedbackService {

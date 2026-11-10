@@ -1,41 +1,38 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "Node16",
+    "moduleResolution": "Node16",
 
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
 
-    "baseUrl": ".",
-
     "paths": {
-      
       "@pages/*": [
-        "packages/playwright/pages/*"
+        "./packages/playwright/pages/*"
       ],
       "@fixtures/*": [
-        "packages/playwright/fixtures/*"
+        "./packages/playwright/fixtures/*"
       ],
       "@data/*": [
-        "packages/playwright/test-data/*"
+        "./packages/playwright/test-data/*"
       ],
       "@utils/*": [
-        "packages/playwright/utils/*"
+        "./packages/playwright/utils/*"
       ],
       "@ai/*": [
-        "packages/ai/*"
+        "./packages/ai/*"
       ],
       "@domain/*": [
-        "packages/domain/*"
+        "./packages/domain/*"
       ],
       "@schemas/*": [
-        "packages/schemas/*"
+        "./packages/schemas/*"
       ],
       "@shared/*": [
-        "packages/shared/*"
+        "./packages/shared/*"
       ]
     }
   },

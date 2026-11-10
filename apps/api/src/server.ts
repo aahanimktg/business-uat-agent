@@ -17,6 +17,9 @@ import { createdJirasRouter } from "./routes/created-jiras.route";
 import { sprintsRouter } from "./routes/sprints.route";
 import { reportsRouter } from "./routes/reports.route";
 import { testCaseReviewRouter } from "./routes/testcase-review.route";
+import { createAutomationRouter } from "./routes/automation.route.js";
+import { createExecutionsRouter } from "./routes/executions.route.js";
+import { ExecutionQueue } from "./workers/executionQueue.js";
 const app = express();
 
 const allowedOrigins = (process.env.WEB_ORIGIN ?? "http://localhost:3000").split(",");
@@ -41,6 +44,13 @@ app.use("/created-jiras", createdJirasRouter);
 app.use("/sprints", sprintsRouter);
 app.use("/testcase-review", testCaseReviewRouter);
 app.use("/reports", reportsRouter);
+const executionQueue = new ExecutionQueue();
+app.use("/automation", createAutomationRouter(executionQueue));
+app.use("/api/executions", createExecutionsRouter(executionQueue));
+
+void executionQueue.restorePending().catch(error => {
+  console.error("Could not restore queued executions:", error);
+});
 
 const PORT = 4000;
 

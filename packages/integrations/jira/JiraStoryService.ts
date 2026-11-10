@@ -1,5 +1,5 @@
 import { JiraClient } from "./JiraClient";
-import { Requirement, RequirementSchema } from "../../ai/schemas/requirement.schema";
+import { Requirement, RequirementSchema } from "../../domain/schemas/requirement.schema";
 
 export interface JiraIssue {
   key: string;

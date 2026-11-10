@@ -1,0 +1,47 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "isolated": true,
+    "launchOptions": {
+      "headless": false,
+      "slowMo": 300,
+      "args": [
+        "--start-maximized",
+        "--disable-blink-features=AutomationControlled",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-infobars",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--disable-popup-blocking",
+        "--enable-javascript",
+        "--lang=en-IN",
+        "--window-size=1920,1080"
+      ]
+    },
+    "contextOptions": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "screen": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "locale": "en-IN",
+      "timezoneId": "Asia/Kolkata",
+      "geolocation": {
+        "latitude": 19.076,
+        "longitude": 72.8777
+      },
+      "permissions": [],
+      "ignoreHTTPSErrors": true,
+      "colorScheme": "light",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.12 Safari/537.36"
+    },
+    "outputDir": "output/automation/mcp"
+  }
+}

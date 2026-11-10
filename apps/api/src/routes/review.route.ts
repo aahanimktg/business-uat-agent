@@ -1,7 +1,7 @@
 import { Router } from "express";
 import fs from "fs/promises";
 import path from "path";
-import { ReviewRequestSchema } from "../../../../packages/ai/schemas/test-plan.schema";
+import { ReviewRequestSchema } from "../../../../packages/domain/schemas/test-plan.schema";
 import { AIProvider } from "../../../../packages/ai/providers/AIProvider";
 import { StructuredResponseService } from "../../../../packages/ai/services/structured-response.service";
 import { FeedbackService } from "../../../../packages/ai/services/feedback.service";

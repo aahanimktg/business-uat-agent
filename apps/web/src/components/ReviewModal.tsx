@@ -5,6 +5,34 @@ import { getTextExportUrl, reviewTestCases } from "@/lib/api";
 
 const APPROVAL_THRESHOLD_PERCENT = 70;
 
+function formatDescription(description: string) {
+  const normalized = description
+    .replace(/\r\n/g, "\n")
+    .replace(/^Description(?=\S)/i, "Description\n")
+    .replace(/\n?Acceptance Criteria\s*:/gi, "\n\nAcceptance Criteria:\n")
+    .trim();
+
+  return normalized
+    .split(/\n{2,}/)
+    .map((section) => {
+      const lines = section
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+      const isAcceptanceCriteria = /^Acceptance Criteria:$/i.test(lines[0] ?? "");
+      const items = (isAcceptanceCriteria ? lines.slice(1) : lines)
+        .map((line) => line.replace(/^[-*•]\s*/, "").trim())
+        .filter(Boolean);
+
+      return {
+        heading: isAcceptanceCriteria ? "Acceptance Criteria" : null,
+        items,
+        isList: isAcceptanceCriteria || lines.every((line) => /^[-*•]\s+/.test(line)),
+      };
+    })
+    .filter((section) => section.items.length > 0);
+}
+
 export default function ReviewModal({
   plan,
   onClose,
@@ -174,9 +202,32 @@ export default function ReviewModal({
         <div className="p-8">
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <h2 className="text-lg font-bold text-slate-800">Story Description</h2>
-            <p className="mt-3 text-sm text-slate-600 whitespace-pre-wrap">
-              {plan.description || "No description available."}
-            </p>
+            {plan.description ? (
+              <div className="mt-4 space-y-5 text-sm text-slate-600">
+                {formatDescription(plan.description).map((section, index) => (
+                  <section key={`${section.heading ?? "description"}-${index}`}>
+                    {section.heading && (
+                      <h3 className="mb-2 text-sm font-bold uppercase tracking-wide text-slate-800">
+                        {section.heading}
+                      </h3>
+                    )}
+                    {section.isList ? (
+                      <ul className="list-disc space-y-2 pl-5">
+                        {section.items.map((item, itemIndex) => (
+                          <li key={`${index}-${itemIndex}`}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="whitespace-pre-line leading-7">
+                        {section.items.join("\n")}
+                      </p>
+                    )}
+                  </section>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-slate-500">No description available.</p>
+            )}
           </div>
 
           {/* Header */}

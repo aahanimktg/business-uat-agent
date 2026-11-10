@@ -6,7 +6,7 @@ import { AIProvider } from "../ai/providers/AIProvider";
 import { PlannerService } from "../ai/services/planner.service";
 import { StructuredResponseService } from "../ai/services/structured-response.service";
 
-import { Requirement } from "../ai/schemas/requirement.schema";
+import { Requirement } from "../domain/schemas/requirement.schema";
 
 export class SprintPlanningService {
   // Legacy path: fetches everything from Jira live (sequential per story). Prefer
